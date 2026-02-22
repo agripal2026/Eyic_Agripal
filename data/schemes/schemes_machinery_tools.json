@@ -1,0 +1,134 @@
+{
+  "state": "Karnataka",
+  "category_key": "farm_machinery",
+  "category_label": "Farm Machinery & Equipment Support Schemes",
+  "schemes": [
+
+    {
+      "id": "KAR-MACH-001",
+      "name": "Raitha Yantra Dhare (Farm Machinery Rental Services)",
+      "category": "farm_machinery",
+      "category_label": "Farm Mechanization Support",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "sector": "Agriculture",
+      "stage": ["Cultivation", "Harvest", "Post-Harvest Handling"],
+      "post_harvest": true,
+
+      "description": "Provides farm machinery such as tractors, tillers, power weeders and post-harvest equipment through Custom Hiring Centers at subsidized rental rates.",
+      "benefits": "Affordable access to modern farm machinery, reduced cultivation cost and improved productivity.",
+      "eligibility": "All registered farmers in Karnataka; priority to small and marginal farmers.",
+      "how_to_apply": "Apply through Custom Hiring Centers or Raitha Samparka Kendras.",
+      "contact_number": "Raitha Samparka Kendra",
+      "website": "https://raitamitra.karnataka.gov.in/english",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-MACH-002",
+      "name": "Subsidy for Purchase of Agricultural Machinery & Implements",
+      "category": "farm_machinery",
+      "category_label": "Machinery Purchase Subsidy",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "sector": "Mechanization",
+      "stage": ["Pre-Harvest", "Harvest"],
+      "post_harvest": false,
+
+      "description": "Provides capital subsidy for purchase of tractors, rotavators, threshers, power tillers and harvesting equipment.",
+      "benefits": "Encourages farm mechanization and reduces dependency on manual labour.",
+      "eligibility": "Small, marginal and medium farmers as per landholding and income criteria.",
+      "how_to_apply": "Apply through District Agriculture Office or subsidy portal.",
+      "contact_number": "District Agriculture Office",
+      "website": "https://raitamitra.karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-MACH-003",
+      "name": "Custom Hiring Centers – Establishment Assistance",
+      "category": "farm_machinery",
+      "category_label": "Custom Hiring Center Support",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "scope": "State + Central Assisted",
+      "location": "Karnataka",
+      "sector": "Mechanization Infrastructure",
+      "stage": ["Cultivation", "Harvest"],
+      "post_harvest": true,
+
+      "description": "Provides financial assistance to establish machinery rental centers for farmers who do not own equipment.",
+      "benefits": "Shared access to machinery, reduced capital burden and improved mechanization coverage.",
+      "eligibility": "FPOs, farmer cooperatives, Gram Panchayats and SHG producer groups.",
+      "how_to_apply": "Apply through Department of Agriculture or District Level Committees.",
+      "contact_number": "District Agriculture Office",
+      "website": "https://pmfme.mofpi.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-MACH-004",
+      "name": "Power Tiller & Mini Tractor Subsidy Scheme",
+      "category": "farm_machinery",
+      "category_label": "Small Farm Mechanization Subsidy",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "sector": "Small Machinery",
+      "stage": ["Land Preparation", "Cultivation"],
+      "post_harvest": false,
+
+      "description": "Provides subsidy for purchase of power tillers and mini tractors suitable for small, hilly and rainfed farms.",
+      "benefits": "Improved land preparation efficiency and reduced labour dependency.",
+      "eligibility": "Farmers owning small, fragmented, hilly or rainfed landholdings.",
+      "how_to_apply": "Apply through District Agriculture Office.",
+      "contact_number": "District Agriculture Office",
+      "website": "https://raitamitra.karnataka.gov.in/english",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-MACH-005",
+      "name": "Post-Harvest Machinery Assistance – Graders & Cleaners",
+      "category": "farm_machinery",
+      "category_label": "Post-Harvest Machinery Support",
+      "department": "Department of Agriculture & Horticulture, Government of Karnataka",
+      "scope": "State + Central Assisted",
+      "location": "Karnataka",
+      "sector": "Post-Harvest Processing",
+      "stage": ["Post-Harvest", "Processing"],
+      "post_harvest": true,
+
+      "description": "Provides subsidy support for seed graders, cleaners, decorticators and small post-harvest processing machinery.",
+      "benefits": "Improved produce quality, reduced post-harvest losses and value addition.",
+      "eligibility": "Individual farmers, SHGs, FPOs and farmer cooperatives.",
+      "how_to_apply": "Apply through District Agriculture or Horticulture Department.",
+      "contact_number": "District Agriculture Office",
+      "website": "https://nhm.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-MACH-006",
+      "name": "Horticulture Mechanization & Equipment Subsidy",
+      "category": "farm_machinery",
+      "category_label": "Horticulture Equipment Support",
+      "department": "Department of Horticulture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "sector": "Horticulture Support",
+      "stage": ["Cultivation", "Harvest", "Post-Harvest"],
+      "post_harvest": true,
+
+      "description": "Provides subsidy for horticulture tools, sprayers, pruning equipment, harvesting tools and plastic crates.",
+      "benefits": "Improved orchard management, harvesting efficiency and reduced post-harvest damage.",
+      "eligibility": "Registered horticulture farmers in Karnataka.",
+      "how_to_apply": "Apply through District Horticulture Office.",
+      "contact_number": "District Horticulture Office",
+      "website": "https://horticulture.karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    }
+
+  ]
+}

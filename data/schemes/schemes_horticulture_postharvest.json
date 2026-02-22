@@ -1,0 +1,182 @@
+{
+  "state": "Karnataka",
+  "category_key": "horticulture_postharvest",
+  "category_label": "Horticulture & Post-Harvest Schemes",
+  "schemes": [
+    {
+      "id": "KAR-HORT-001",
+      "name": "National Horticulture Mission (NHM) – Karnataka Implementation",
+      "category": "horticulture_postharvest",
+      "category_label": "Horticulture Development",
+      "department": "Department of Horticulture, Government of Karnataka",
+      "scope": "Central Scheme (State Implemented)",
+      "location": "Karnataka",
+      "crop_type": ["Fruits", "Vegetables", "Plantation Crops"],
+      "sector": "Horticulture",
+      "stage": ["Pre-Harvest"],
+      "post_harvest": true,
+
+      "description": "Supports expansion of horticulture crops, nursery development, area expansion and input assistance.",
+      "benefits": "Subsidy support for planting material, area expansion and horticulture inputs.",
+      "eligibility": "Farmers cultivating horticulture crops in Karnataka; subsidy varies by crop and activity.",
+      "how_to_apply": "Apply through District Horticulture Office.",
+      "contact_number": "District Horticulture Office",
+      "website": "https://horticulture.karnataka.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "KAR-HORT-002",
+      "name": "Micro Irrigation for Horticulture Crops (PMKSY – Horticulture)",
+      "category": "horticulture_postharvest",
+      "category_label": "Irrigation Subsidy",
+      "department": "Department of Horticulture, Government of Karnataka",
+      "scope": "Central & State Funding",
+      "location": "Karnataka",
+      "crop_type": ["Horticulture Crops"],
+      "sector": "Horticulture",
+      "stage": ["Pre-Harvest"],
+      "post_harvest": false,
+
+      "description": "Provides subsidy for installation of drip and sprinkler irrigation systems in horticulture.",
+      "benefits": "Improved water efficiency and higher crop productivity.",
+      "eligibility": "All farmers growing notified horticulture crops.",
+      "how_to_apply": "Apply through Horticulture Department or online portal.",
+      "contact_number": "Horticulture Department",
+      "website": "https://horticulture.karnataka.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "KAR-HORT-003",
+      "name": "Protected Cultivation / Polyhouse Subsidy Scheme",
+      "category": "horticulture_postharvest",
+      "category_label": "Protected Cultivation",
+      "department": "Department of Horticulture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "crop_type": ["Flowers", "Vegetables"],
+      "sector": "Horticulture",
+      "stage": ["Pre-Harvest"],
+      "post_harvest": false,
+
+      "description": "Provides subsidy for polyhouse and shade net cultivation of high-value crops.",
+      "benefits": "Higher yields, quality produce and protected growing conditions.",
+      "eligibility": "Registered farmers cultivating high-value horticulture crops.",
+      "how_to_apply": "Apply through District Horticulture Office.",
+      "contact_number": "District Horticulture Office",
+      "website": "https://horticulture.karnataka.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "KAR-PH-001",
+      "name": "Post-Harvest Management Subsidy (Cold Storage & Warehousing Support)",
+      "category": "horticulture_postharvest",
+      "category_label": "Post-Harvest Infrastructure",
+      "department": "Department of Horticulture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "crop_type": ["Fruits", "Vegetables"],
+      "sector": "Post-Harvest",
+      "stage": ["Post-Harvest"],
+      "post_harvest": true,
+
+      "description": "Provides assistance for construction of cold storage and post-harvest infrastructure.",
+      "benefits": "Reduced post-harvest losses and improved storage life.",
+      "eligibility": "Individuals, farmer groups and FPOs engaged in horticulture handling.",
+      "how_to_apply": "Apply through Horticulture Department or District Office.",
+      "contact_number": "District Horticulture Office",
+      "website": "https://horticulture.karnataka.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "KAR-PH-002",
+      "name": "Grading, Packing & Primary Processing Support for Horticulture Produce",
+      "category": "horticulture_postharvest",
+      "category_label": "Post-Harvest Processing",
+      "department": "Department of Horticulture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "crop_type": ["Fruits", "Vegetables"],
+      "sector": "Post-Harvest",
+      "stage": ["Post-Harvest"],
+      "post_harvest": true,
+
+      "description": "Supports development of grading, sorting, packaging and primary processing units.",
+      "benefits": "Improved market value and reduced wastage.",
+      "eligibility": "Eligible farmers, SHGs, cooperatives and FPOs.",
+      "how_to_apply": "Apply through District Horticulture Office.",
+      "contact_number": "District Horticulture Office",
+      "website": "https://horticulture.karnataka.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-PH-003",
+      "name": "Mission for Integrated Development of Horticulture (MIDH) – Post-Harvest Components",
+      "category": "horticulture_postharvest",
+      "category_label": "Cold Chain & Storage",
+      "department": "Ministry of Agriculture & Farmers Welfare",
+      "scope": "Central Scheme (Implemented in Karnataka)",
+      "location": "Karnataka",
+      "crop_type": ["Horticulture Crops"],
+      "sector": "Post-Harvest",
+      "stage": ["Post-Harvest"],
+      "post_harvest": true,
+
+      "description": "Financial assistance for cold chain, pack houses, ripening chambers and storage units.",
+      "benefits": "Improved shelf life and value addition for horticulture produce.",
+      "eligibility": "Farmers, FPOs, cooperatives, entrepreneurs and agri startups.",
+      "how_to_apply": "Apply through State Horticulture Mission or Department offices.",
+      "contact_number": "State Horticulture Mission",
+      "website": "https://midh.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-PH-004",
+      "name": "Pradhan Mantri Formalisation of Micro Food Processing Enterprises (PMFME)",
+      "category": "horticulture_postharvest",
+      "category_label": "Food Processing & Value Addition",
+      "department": "Ministry of Food Processing Industries",
+      "scope": "National Scheme (Available in Karnataka)",
+      "location": "Karnataka",
+      "crop_type": ["All Crops", "Horticulture", "Millets"],
+      "sector": "Processing & Value Addition",
+      "stage": ["Post-Harvest", "Processing"],
+      "post_harvest": true,
+
+      "description": "Provides credit-linked subsidy and financial assistance to micro food processing enterprises.",
+      "benefits": "Capital subsidy, branding and market support.",
+      "eligibility": "Individual entrepreneurs, SHGs, FPOs and cooperatives.",
+      "how_to_apply": "Apply through PMFME online portal or State Nodal Agency.",
+      "contact_number": "State Nodal Agency",
+      "website": "https://pmfme.mofpi.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-PH-005",
+      "name": "Cold Chain, Value Addition and Preservation Infrastructure Scheme",
+      "category": "horticulture_postharvest",
+      "category_label": "Cold Chain Infrastructure",
+      "department": "Ministry of Food Processing Industries",
+      "scope": "National Scheme",
+      "location": "Karnataka",
+      "crop_type": ["Perishable Produce"],
+      "sector": "Post-Harvest",
+      "stage": ["Post-Harvest"],
+      "post_harvest": true,
+
+      "description": "Supports creation of cold chain infrastructure including pack houses, transport and cold storage.",
+      "benefits": "Reduced spoilage and improved supply chain efficiency.",
+      "eligibility": "Food processing units, FPOs, private enterprises and cooperatives.",
+      "how_to_apply": "Apply through Ministry of Food Processing Industries portal.",
+      "contact_number": "MoFPI Helpdesk",
+      "website": "https://www.mofpi.gov.in/",
+      "last_verified": "2026-01-11"
+    }
+  ]
+}

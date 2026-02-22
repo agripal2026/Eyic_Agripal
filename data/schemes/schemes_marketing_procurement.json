@@ -1,0 +1,140 @@
+{
+  "state": "Karnataka",
+  "category_key": "marketing_procurement",
+  "category_label": "Marketing, Procurement & Market Linkage Schemes",
+  "schemes": [
+
+    {
+      "id": "KAR-MKT-001",
+      "scheme_level": "State",
+      "name": "Rashtriya e-Market Services (ReMS) – Unified Market Platform",
+      "category": "marketing_procurement",
+      "category_label": "Digital Market Platform",
+      "department": "Department of Agricultural Marketing, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "sector": "Market & Procurement",
+      "stage": ["Post-Harvest", "Marketing"],
+      "post_harvest": true,
+
+      "description": "Provides an online trading platform with transparent price discovery and unified market access across APMC markets in Karnataka.",
+      "benefits": "Transparent pricing, reduced intermediaries and wider market access for farmers.",
+      "eligibility": "Registered farmers, traders, commission agents and market participants in Karnataka.",
+      "how_to_apply": "Register through APMC markets or the ReMS market portal.",
+      "contact_number": "APMC Market Office",
+      "website": "https://www.remsl.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "KAR-MKT-002",
+      "scheme_level": "State",
+      "name": "Minimum Support Price Procurement – Karnataka State Agencies",
+      "category": "marketing_procurement",
+      "category_label": "MSP Procurement",
+      "department": "Food, Civil Supplies & Consumer Affairs Department, Government of Karnataka",
+      "scope": "State Implementation of Central MSP",
+      "location": "Karnataka",
+      "sector": "Market & Procurement",
+      "stage": ["Post-Harvest"],
+      "post_harvest": true,
+
+      "description": "Ensures procurement of notified crops at Minimum Support Price through designated procurement centers.",
+      "benefits": "Price assurance, income stability and protection from market fluctuations.",
+      "eligibility": "Farmers selling notified crops during the official procurement period.",
+      "how_to_apply": "Sell produce at designated procurement centers or APMC yards.",
+      "contact_number": "Procurement Center",
+      "website": "https://ahara.kar.nic.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "KAR-MKT-003",
+      "scheme_level": "State",
+      "name": "Karnataka Agricultural Produce Marketing (Regulation) System",
+      "category": "marketing_procurement",
+      "category_label": "Market Regulation & Support",
+      "department": "Department of Agricultural Marketing, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "sector": "Market & Procurement",
+      "stage": ["Post-Harvest", "Marketing"],
+      "post_harvest": true,
+
+      "description": "Provides regulated market access with grading, quality control and market fee regulation through APMC markets.",
+      "benefits": "Fair trade practices, quality assurance and regulated pricing mechanisms.",
+      "eligibility": "Licensed traders, farmers and registered market participants.",
+      "how_to_apply": "Register through APMC offices or market committees.",
+      "contact_number": "APMC Office",
+      "website": "https://sahakara.karnataka.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-MKT-004",
+      "scheme_level": "Central",
+      "name": "National Agriculture Market (e-NAM)",
+      "category": "marketing_procurement",
+      "category_label": "National Digital Trading Platform",
+      "department": "Small Farmers Agribusiness Consortium (SFAC) / Ministry of Agriculture",
+      "scope": "National Scheme (Implemented in Karnataka APMCs)",
+      "location": "Karnataka",
+      "sector": "Market & Procurement",
+      "stage": ["Post-Harvest", "Marketing"],
+      "post_harvest": true,
+
+      "description": "A national online trading platform connecting APMCs across India for transparent bidding and inter-state trade.",
+      "benefits": "Wider buyer access, competitive pricing and transparent auctions.",
+      "eligibility": "Registered farmers, traders, FPOs and market participants.",
+      "how_to_apply": "Register through the e-NAM portal or APMC facilitation centers.",
+      "contact_number": "APMC Facilitation Center",
+      "website": "https://enam.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "KAR-MKT-005",
+      "scheme_level": "State",
+      "name": "Support for Farmer Producer Organizations (Market & Aggregation Support)",
+      "category": "marketing_procurement",
+      "category_label": "Collective Marketing & Aggregation",
+      "department": "Department of Agriculture & Cooperation, Government of Karnataka",
+      "scope": "State Supported (Linked with Central FPO Scheme)",
+      "location": "Karnataka",
+      "sector": "Market & FPO",
+      "stage": ["Post-Harvest", "Aggregation", "Marketing"],
+      "post_harvest": true,
+
+      "description": "Supports aggregation, warehousing, collective marketing and direct market linkage for farmer producer organizations.",
+      "benefits": "Improved bargaining power, reduced transaction costs and better market realization.",
+      "eligibility": "Registered FPOs, cooperatives and farmer producer companies.",
+      "how_to_apply": "Apply through District Agriculture Office, NABARD or SFAC.",
+      "contact_number": "District Agriculture Office",
+      "website": "https://nabard.org/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-MKT-006",
+      "scheme_level": "Central",
+      "name": "Market Infrastructure Development for Grading & Rural Markets",
+      "category": "marketing_procurement",
+      "category_label": "Market Infrastructure Support",
+      "department": "Ministry of Agriculture & Farmers Welfare",
+      "scope": "Central Assistance for State Markets",
+      "location": "Karnataka",
+      "sector": "Market & Infrastructure",
+      "stage": ["Post-Harvest"],
+      "post_harvest": true,
+
+      "description": "Provides financial assistance for development of rural markets, grading yards, pack houses and farmer market facilities.",
+      "benefits": "Improved market infrastructure, reduced post-harvest losses and better price realization.",
+      "eligibility": "State agencies, market committees, cooperatives and FPOs.",
+      "how_to_apply": "Apply through State Agricultural Marketing Department.",
+      "contact_number": "Agricultural Marketing Department",
+      "website": "https://agricoop.gov.in/",
+      "last_verified": "2026-01-11"
+    }
+
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "state": "Karnataka",
+  "category_key": "agriculture",
+  "category_label": "Agriculture & Allied Schemes",
+  "schemes": [
+    {
+      "id": "KAR-AGRI-001",
+      "name": "Karnataka Raitha Suraksha Pradhana Mantri Fasal Bima Yojana",
+      "category": "agriculture",
+      "category_label": "Crop Insurance",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Agriculture",
+      "stage": ["Pre-Harvest", "Crop Loss Risk"],
+      "post_harvest": false,
+
+      "description": "Provides insurance coverage and financial support to farmers in the event of crop loss due to natural calamities.",
+      "benefits": "Compensation for crop loss caused by drought, flood, pests and other natural risks.",
+      "eligibility": "Farmers growing notified crops in Karnataka. Enrollment through Gram One or CSC centers.",
+      "how_to_apply": "Apply via State Portal, Gram One or CSC centers.",
+      "contact_number": "Notified at district level",
+      "website": "https://raitamitra.karnataka.gov.in/info-2/Karnataka%2BRaitha%2BSuraksha%2BPradhana%2BMantri%2BFasal%2BBima%2BYojana/en",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-AGRI-002",
+      "name": "Distribution of Quality Seeds on Subsidy",
+      "category": "agriculture",
+      "category_label": "Input Subsidy",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Agriculture",
+      "stage": ["Pre-Harvest"],
+      "post_harvest": false,
+
+      "description": "Provides quality certified seeds to farmers at subsidized rates to improve productivity.",
+      "benefits": "Reduced seed cost and improved crop yield.",
+      "eligibility": "All eligible farmers in Karnataka.",
+      "how_to_apply": "Apply through District Agriculture Office.",
+      "contact_number": "District Agriculture Office",
+      "website": "https://chitradurga.nic.in/en/agriculture/",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-AGRI-003",
+      "name": "Krishi Bhagya Scheme",
+      "category": "agriculture",
+      "category_label": "Irrigation & Water Management",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Agriculture",
+      "stage": ["Pre-Harvest"],
+      "post_harvest": false,
+
+      "description": "Supports irrigation through farm ponds, water harvesting structures and protective irrigation.",
+      "benefits": "Improved water availability and drought resilience.",
+      "eligibility": "Farmers across Karnataka.",
+      "how_to_apply": "Apply via District Agriculture Office.",
+      "contact_number": "District Agriculture Office",
+      "website": "https://chitradurga.nic.in/en/agriculture/",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-AGRI-004",
+      "name": "Customized Hiring Service Centre (Krishi Yantra Dhare)",
+      "category": "agriculture",
+      "category_label": "Farm Mechanization",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Agriculture",
+      "stage": ["Pre-Harvest"],
+      "post_harvest": false,
+
+      "description": "Provides agricultural machinery and equipment on rental basis through hobli-level centres.",
+      "benefits": "Reduces cost of farm mechanization for small and marginal farmers.",
+      "eligibility": "All categories of farmers.",
+      "how_to_apply": "Apply via Department app or District Agriculture Office.",
+      "contact_number": "Department Agriculture",
+      "website": "https://raitamitra.karnataka.gov.in/english",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-AGRI-005",
+      "name": "Farm Mechanisation Programme",
+      "category": "agriculture",
+      "category_label": "Mechanization Subsidy",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "scope": "State & Central Funding",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Agriculture",
+      "stage": ["Pre-Harvest"],
+      "post_harvest": false,
+
+      "description": "Provides subsidies for purchasing agricultural machinery.",
+      "benefits": "50% subsidy for general farmers and up to 90% for SC/ST farmers.",
+      "eligibility": "Farmers in Karnataka, subsidy limits apply.",
+      "how_to_apply": "Apply via District Agriculture Office or Agri Portal.",
+      "contact_number": "Agriculture Department",
+      "website": "https://kkisan.karnataka.gov.in/",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-AGRI-006",
+      "name": "Pradhan Mantri Krishi Sinchayee Yojana (Micro Irrigation)",
+      "category": "agriculture",
+      "category_label": "Micro Irrigation",
+      "department": "Ministry of Agriculture & Farmers Welfare",
+      "scope": "Central Scheme (State Implementation)",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Agriculture",
+      "stage": ["Pre-Harvest"],
+      "post_harvest": false,
+
+      "description": "Supports installation of drip and sprinkler irrigation systems.",
+      "benefits": "Water efficiency and increased crop productivity.",
+      "eligibility": "All categories of farmers.",
+      "how_to_apply": "Apply online or through District Agriculture Office.",
+      "contact_number": "State Agriculture Office",
+      "website": "https://kkisan.karnataka.gov.in/",
+      "last_verified": "2026-01-10"
+    }
+  ]
+}

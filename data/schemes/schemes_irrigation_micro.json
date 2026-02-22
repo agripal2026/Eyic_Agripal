@@ -1,0 +1,116 @@
+{
+  "state": "Karnataka",
+  "category_key": "irrigation_micro",
+  "category_label": "Irrigation & Micro-Irrigation Support Schemes",
+  "schemes": [
+    {
+      "id": "KAR-IRR-001",
+      "name": "PMKSY – Per Drop More Crop (Micro-Irrigation Subsidy)",
+      "category": "irrigation_micro",
+      "category_label": "Micro-Irrigation Subsidy",
+      "department": "Department of Agriculture & Horticulture, Government of Karnataka",
+      "scope": "Central & State Assisted",
+      "location": "Karnataka",
+      "crop_type": ["Horticulture Crops", "Vegetables", "Fruits", "Plantation Crops"],
+      "sector": "Irrigation & Water Management",
+      "stage": ["Cultivation", "Water Management"],
+      "post_harvest": false,
+
+      "description": "Provides subsidy assistance for installation of drip and sprinkler irrigation systems to improve water-use efficiency.",
+      "benefits": "Reduced water consumption and lower cultivation cost with improved yields.",
+      "eligibility": "All registered farmers growing eligible crops in notified districts.",
+      "how_to_apply": "Apply through Department of Horticulture or Raitha Samparka Kendra.",
+      "contact_number": "Raitha Samparka Kendra",
+      "website": "https://pmksy.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-IRR-002",
+      "name": "Drip Irrigation Subsidy for Horticulture Crops",
+      "category": "irrigation_micro",
+      "category_label": "Drip Irrigation Support",
+      "department": "Department of Horticulture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "crop_type": ["Vegetables", "Fruits", "Spices", "Plantation Crops"],
+      "sector": "Horticulture Irrigation",
+      "stage": ["Cultivation", "Water Management"],
+      "post_harvest": false,
+
+      "description": "Provides financial subsidy for installation of drip irrigation systems for horticulture crops.",
+      "benefits": "Efficient water delivery and improved crop productivity.",
+      "eligibility": "Eligible horticulture farmers registered with the district department.",
+      "how_to_apply": "Apply through District Horticulture Office.",
+      "contact_number": "District Horticulture Office",
+      "website": "https://horticulture.karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-IRR-003",
+      "name": "Sprinkler Irrigation Subsidy Scheme",
+      "category": "irrigation_micro",
+      "category_label": "Sprinkler Irrigation Support",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "crop_type": ["Millets", "Pulses", "Oilseeds", "Rainfed Crops"],
+      "sector": "Dryland & Rainfed Irrigation",
+      "stage": ["Cultivation", "Water Management"],
+      "post_harvest": false,
+
+      "description": "Provides subsidy for installation of sprinkler irrigation systems in rainfed and dryland areas.",
+      "benefits": "Improved irrigation coverage and crop resilience in dry regions.",
+      "eligibility": "Priority to small and marginal farmers in dryland regions.",
+      "how_to_apply": "Apply through District Agriculture Office.",
+      "contact_number": "District Agriculture Office",
+      "website": "https://raitamitra.karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-IRR-004",
+      "name": "Irrigation Pipeline & Water Conveyance Subsidy",
+      "category": "irrigation_micro",
+      "category_label": "Irrigation Pipeline Support",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Water Distribution",
+      "stage": ["Cultivation", "Farm Infrastructure"],
+      "post_harvest": false,
+
+      "description": "Provides subsidy for purchase and installation of PVC irrigation pipelines for efficient water conveyance.",
+      "benefits": "Reduced water loss and improved on-farm water distribution.",
+      "eligibility": "Farmers with functional borewell or water source connections.",
+      "how_to_apply": "Apply through Raitha Samparka Kendra or District Agriculture Office.",
+      "contact_number": "Raitha Samparka Kendra",
+      "website": "https://raitamitra.karnataka.gov.in/english",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-IRR-005",
+      "name": "Watershed Development & Farm Pond Assistance",
+      "category": "irrigation_micro",
+      "category_label": "Water Conservation Support",
+      "department": "Watershed Development Department, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka (Selected Blocks)",
+      "crop_type": ["Rainfed Crops", "Millets", "Oilseeds"],
+      "sector": "Water Resource Conservation",
+      "stage": ["Soil & Water Conservation", "Farm Infrastructure"],
+      "post_harvest": false,
+
+      "description": "Financial support for construction of farm ponds and water harvesting structures in drought-prone areas.",
+      "benefits": "Improved groundwater recharge and water availability for crops.",
+      "eligibility": "Farmers located in notified watershed development project areas.",
+      "how_to_apply": "Apply through Watershed Development Department Office.",
+      "contact_number": "Watershed Development Office",
+      "website": "https://watershed.karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    }
+  ]
+}

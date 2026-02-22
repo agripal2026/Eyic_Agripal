@@ -1,0 +1,138 @@
+{
+  "state": "Karnataka",
+  "category_key": "credit_finance",
+  "category_label": "Credit, Finance & Interest Subvention Schemes",
+  "schemes": [
+    {
+      "id": "IND-CREDIT-001",
+      "name": "Kisan Credit Card (KCC)",
+      "category": "credit_finance",
+      "category_label": "Short-Term Agricultural Credit",
+      "department": "Ministry of Agriculture & Farmers Welfare / RBI / NABARD",
+      "scope": "National Scheme (Applicable in Karnataka)",
+      "location": "Karnataka",
+      "crop_type": ["All Crops", "Horticulture", "Allied Activities"],
+      "sector": "Agriculture Finance",
+      "stage": ["Pre-Harvest", "Working Capital"],
+      "post_harvest": true,
+
+      "description": "Provides short-term working capital loans for crop cultivation, allied activities and post-harvest expenses at concessional interest rates.",
+      "benefits": "Easy access to credit with interest subvention and flexible repayment options.",
+      "eligibility": "Farmers with cultivable land or engaged in allied agricultural activities, subject to bank norms.",
+      "how_to_apply": "Apply through Commercial Banks, Cooperative Banks or Regional Rural Banks.",
+      "contact_number": "Concerned Bank Branch",
+      "website": "https://www.nabard.org/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-CREDIT-002",
+      "name": "Interest Subvention Scheme for Short-Term Crop Loans",
+      "category": "credit_finance",
+      "category_label": "Interest Subsidy",
+      "department": "Ministry of Finance / Department of Financial Services",
+      "scope": "National Scheme",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Agriculture Finance",
+      "stage": ["Pre-Harvest", "Crop Production"],
+      "post_harvest": false,
+
+      "description": "Provides interest subvention on short-term crop loans to reduce the financial burden on farmers.",
+      "benefits": "Lower effective interest rate on crop loans.",
+      "eligibility": "Farmers availing short-term crop loans through banks and cooperative institutions.",
+      "how_to_apply": "Automatically applied through participating banks.",
+      "contact_number": "Concerned Bank",
+      "website": "https://financialservices.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "KAR-CREDIT-003",
+      "name": "Interest Subsidy on Agricultural Loans – Karnataka Cooperative Banks",
+      "category": "credit_finance",
+      "category_label": "State Interest Support",
+      "department": "Department of Cooperation, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Agriculture Finance",
+      "stage": ["Pre-Harvest", "Working Capital"],
+      "post_harvest": false,
+
+      "description": "Provides additional state-level interest subsidy on crop loans issued through cooperative banks.",
+      "benefits": "Further reduction in interest burden for cooperative bank borrowers.",
+      "eligibility": "Members borrowing through PACS and District Cooperative Banks.",
+      "how_to_apply": "Apply through Cooperative Societies or DCC Banks.",
+      "contact_number": "Cooperative Department",
+      "website": "https://sahakara.karnataka.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-CREDIT-004",
+      "name": "Agriculture Infrastructure Fund (AIF)",
+      "category": "credit_finance",
+      "category_label": "Post-Harvest Infrastructure Finance",
+      "department": "Ministry of Agriculture & Farmers Welfare",
+      "scope": "National Scheme",
+      "location": "Karnataka",
+      "crop_type": ["All Crops", "Horticulture", "Post-Harvest"],
+      "sector": "Infrastructure & Value Chain",
+      "stage": ["Post-Harvest", "Storage", "Processing"],
+      "post_harvest": true,
+
+      "description": "Provides long-term debt financing with interest subvention for post-harvest infrastructure projects.",
+      "benefits": "Interest subvention and credit guarantee support.",
+      "eligibility": "FPOs, Cooperatives, Startups, Entrepreneurs and State Agencies.",
+      "how_to_apply": "Apply through AIF online portal and partner banks.",
+      "contact_number": "AIF Helpdesk",
+      "website": "https://agriinfra.dac.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-CREDIT-005",
+      "name": "PMFME – Credit Linked Subsidy Scheme",
+      "category": "credit_finance",
+      "category_label": "Food Processing Finance",
+      "department": "Ministry of Food Processing Industries",
+      "scope": "National Scheme",
+      "location": "Karnataka",
+      "crop_type": ["All Crops", "Horticulture", "Millets"],
+      "sector": "Processing & Value Addition",
+      "stage": ["Post-Harvest", "Processing"],
+      "post_harvest": true,
+
+      "description": "Provides credit-linked subsidy and working capital assistance to micro food processing enterprises.",
+      "benefits": "35% credit-linked subsidy for eligible processing units.",
+      "eligibility": "Individual entrepreneurs, SHGs, Cooperatives and FPOs.",
+      "how_to_apply": "Apply through PMFME portal or State Nodal Agency.",
+      "contact_number": "State Nodal Agency",
+      "website": "https://pmfme.mofpi.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-CREDIT-006",
+      "name": "NABARD Refinance Support for Agriculture & Rural Development",
+      "category": "credit_finance",
+      "category_label": "Refinance Support",
+      "department": "National Bank for Agriculture & Rural Development (NABARD)",
+      "scope": "National Support",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Agriculture & Rural Finance",
+      "stage": ["Pre-Harvest", "Allied Activities"],
+      "post_harvest": true,
+
+      "description": "Provides refinance support to banks for agricultural, allied and post-harvest lending.",
+      "benefits": "Improves credit availability in rural and agricultural sectors.",
+      "eligibility": "Banks, Cooperative Institutions and RRBs.",
+      "how_to_apply": "Through lending institutions partnered with NABARD.",
+      "contact_number": "NABARD Regional Office",
+      "website": "https://www.nabard.org/",
+      "last_verified": "2026-01-11"
+    }
+  ]
+}

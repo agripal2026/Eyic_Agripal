@@ -1,0 +1,138 @@
+{
+  "state": "Karnataka",
+  "category_key": "fpo_capacity",
+  "category_label": "FPO Formation & Capacity Building Schemes",
+  "schemes": [
+    {
+      "id": "IND-FPO-001",
+      "name": "Central Sector Scheme on Formation and Promotion of 10,000 FPOs",
+      "category": "fpo_capacity",
+      "category_label": "FPO Formation & Promotion",
+      "department": "Ministry of Agriculture & Farmers Welfare / SFAC / NABARD / NCDC",
+      "scope": "National Scheme (Implemented in Karnataka)",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "FPO & Collective Farming",
+      "stage": ["Pre-Harvest", "Post-Harvest", "Marketing"],
+      "post_harvest": true,
+
+      "description": "Supports formation and promotion of Farmer Producer Organisations with financial assistance and structured handholding for five years.",
+      "benefits": "Equity grants, credit guarantee support, capacity building and professional handholding.",
+      "eligibility": "Registered Farmer Producer Organisations promoted through approved implementing agencies.",
+      "how_to_apply": "Apply through Implementing Agencies, SFAC, NABARD or NCDC.",
+      "contact_number": "Through Implementing Agency",
+      "website": "https://fpo.moca.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-FPO-002",
+      "name": "SFAC Equity Grant & Credit Guarantee Scheme (EGCGS)",
+      "category": "fpo_capacity",
+      "category_label": "Equity Support & Credit Guarantee",
+      "department": "Small Farmers Agribusiness Consortium (SFAC)",
+      "scope": "National Scheme (Operational in Karnataka)",
+      "location": "Karnataka",
+      "crop_type": ["All Crops", "Horticulture"],
+      "sector": "FPO & Market Aggregation",
+      "stage": ["Post-Harvest", "Aggregation", "Marketing"],
+      "post_harvest": true,
+
+      "description": "Provides equity grants and credit guarantee coverage to strengthen FPO financial capacity.",
+      "benefits": "Improved access to institutional credit and business scaling support.",
+      "eligibility": "Registered Farmer Producer Companies with audited financial records.",
+      "how_to_apply": "Apply online through SFAC portal.",
+      "contact_number": "SFAC Regional Office",
+      "website": "https://sfacindia.com/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-FPO-003",
+      "name": "NABARD Producer Organisation Development Fund (PODF)",
+      "category": "fpo_capacity",
+      "category_label": "Capacity Building & Institutional Support",
+      "department": "National Bank for Agriculture & Rural Development (NABARD)",
+      "scope": "National Support (Implemented in Karnataka)",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "FPO Capacity Building",
+      "stage": ["Pre-Harvest", "Post-Harvest", "Business Development"],
+      "post_harvest": true,
+
+      "description": "Supports formation, incubation, training and business development of Producer Organisations.",
+      "benefits": "Training, incubation, professional support and business planning assistance.",
+      "eligibility": "Registered FPOs, cooperatives and farmer collectives promoted by partner agencies.",
+      "how_to_apply": "Apply through NABARD partner agencies.",
+      "contact_number": "NABARD District Office",
+      "website": "https://www.nabard.org/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-FPO-004",
+      "name": "Mission for Integrated Development of Horticulture (MIDH) – FPO Components",
+      "category": "fpo_capacity",
+      "category_label": "Horticulture FPO Support",
+      "department": "Ministry of Agriculture & Farmers Welfare",
+      "scope": "Central Scheme (Implemented in Karnataka)",
+      "location": "Karnataka",
+      "crop_type": ["Horticulture Crops"],
+      "sector": "FPO & Value Chain Development",
+      "stage": ["Post-Harvest", "Processing", "Marketing"],
+      "post_harvest": true,
+
+      "description": "Supports horticulture-based FPO clusters for post-harvest management, processing and market linkage.",
+      "benefits": "Infrastructure support, value addition and market access for horticulture FPOs.",
+      "eligibility": "Horticulture-based FPOs and cooperatives.",
+      "how_to_apply": "Apply through State Horticulture Mission or FPO clusters.",
+      "contact_number": "State Horticulture Department",
+      "website": "https://midh.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-FPO-005",
+      "name": "Agriculture Infrastructure Fund (AIF) – FPO Infrastructure Support",
+      "category": "fpo_capacity",
+      "category_label": "Post-Harvest Infrastructure Finance",
+      "department": "Ministry of Agriculture & Farmers Welfare",
+      "scope": "National Scheme (Available in Karnataka)",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Infrastructure & Aggregation",
+      "stage": ["Post-Harvest", "Storage", "Processing"],
+      "post_harvest": true,
+
+      "description": "Provides financial support for FPO-led warehouses, cold storage and processing infrastructure.",
+      "benefits": "Interest subvention and long-term credit support.",
+      "eligibility": "Registered FPOs and cooperatives creating community infrastructure.",
+      "how_to_apply": "Apply through AIF portal or lending banks.",
+      "contact_number": "Participating Banks",
+      "website": "https://agriinfra.dac.gov.in/",
+      "last_verified": "2026-01-11"
+    },
+
+    {
+      "id": "IND-FPO-006",
+      "name": "NABARD – Producers Organisation Promoting Institutions (POPIs) Programme",
+      "category": "fpo_capacity",
+      "category_label": "Handholding & Mentorship Support",
+      "department": "National Bank for Agriculture & Rural Development (NABARD)",
+      "scope": "National Programme (Active in Karnataka)",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "FPO Institutional Development",
+      "stage": ["Early Formation", "Capacity Building"],
+      "post_harvest": true,
+
+      "description": "Supports institutions that promote, mentor and nurture Farmer Producer Organisations.",
+      "benefits": "Professional mentoring, governance support and institutional strengthening.",
+      "eligibility": "Recognised Producer Organisation Promoting Institutions (POPIs).",
+      "how_to_apply": "Apply through NABARD partnership channels.",
+      "contact_number": "NABARD Regional Office",
+      "website": "https://www.nabard.org/",
+      "last_verified": "2026-01-11"
+    }
+  ]
+}

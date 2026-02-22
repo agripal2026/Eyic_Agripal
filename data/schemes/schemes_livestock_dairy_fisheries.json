@@ -1,0 +1,153 @@
+{
+  "state": "Karnataka",
+  "category_key": "livestock_fisheries",
+  "category_label": "Livestock, Dairy & Fisheries Schemes",
+  "schemes": [
+    {
+      "id": "IND-LIVE-001",
+      "name": "Rashtriya Gokul Mission",
+      "category": "livestock_fisheries",
+      "category_label": "Dairy & Cattle Development",
+      "department": "Department of Animal Husbandry & Dairying, Government of India",
+      "scope": "National Scheme (Implemented in Karnataka)",
+      "location": "Karnataka",
+      "sector": "Dairy & Animal Husbandry",
+      "stage": ["Production"],
+      "post_harvest": false,
+
+      "description": "Supports genetic improvement of indigenous cattle breeds through AI services, breeding centres and productivity enhancement.",
+      "benefits": "Improved milk productivity, better cattle genetics and breeding infrastructure.",
+      "eligibility": "Dairy farmers, cattle rearers, cooperatives and registered breeding units.",
+      "how_to_apply": "Apply through State Animal Husbandry Department or KMF cooperative network.",
+      "contact_number": "State Animal Husbandry Department",
+      "website": "https://dahd.nic.in/",
+      "last_verified": "2026-01-12"
+    },
+
+    {
+      "id": "KAR-LIVE-002",
+      "name": "Karnataka Pashu Bhagya Scheme",
+      "category": "livestock_fisheries",
+      "category_label": "Livestock Support",
+      "department": "Department of Animal Husbandry & Veterinary Services, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "sector": "Animal Husbandry",
+      "stage": ["Production", "Livelihood"],
+      "post_harvest": false,
+
+      "description": "Provides subsidy assistance for livestock units, fodder support and small ruminant rearing.",
+      "benefits": "Income generation, livestock asset creation and fodder assistance.",
+      "eligibility": "Small and marginal farmers, rural households and women SHG beneficiaries.",
+      "how_to_apply": "Apply through Taluk Veterinary Office or AHVS Department.",
+      "contact_number": "Taluk Veterinary Office",
+      "website": "https://ahvs.karnataka.gov.in/",
+      "last_verified": "2026-01-12"
+    },
+
+    {
+      "id": "IND-LIVE-003",
+      "name": "National Livestock Mission (NLM)",
+      "category": "livestock_fisheries",
+      "category_label": "Livestock & Poultry Development",
+      "department": "Department of Animal Husbandry & Dairying",
+      "scope": "National Scheme (Operational in Karnataka)",
+      "location": "Karnataka",
+      "sector": "Livestock & Poultry",
+      "stage": ["Production", "Enterprise"],
+      "post_harvest": true,
+
+      "description": "Supports goatery, sheep rearing, backyard poultry, fodder development and livestock-based enterprises.",
+      "benefits": "Enterprise development, income diversification and fodder support.",
+      "eligibility": "Individuals, SHGs, FPOs and livestock groups meeting scheme criteria.",
+      "how_to_apply": "Apply through State Animal Husbandry Department.",
+      "contact_number": "District Animal Husbandry Office",
+      "website": "https://dahd.nic.in/nlm",
+      "last_verified": "2026-01-12"
+    },
+
+    {
+      "id": "IND-LIVE-004",
+      "name": "Livestock Insurance Scheme",
+      "category": "livestock_fisheries",
+      "category_label": "Livestock Insurance",
+      "department": "Department of Animal Husbandry & Dairying",
+      "scope": "National Insurance Scheme (Implemented via State Agencies)",
+      "location": "Karnataka",
+      "sector": "Risk Protection",
+      "stage": ["Production"],
+      "post_harvest": false,
+
+      "description": "Provides subsidised insurance coverage to protect farmers against economic loss due to livestock death.",
+      "benefits": "Financial risk protection and income security.",
+      "eligibility": "Farmers owning notified livestock with tagging and registration.",
+      "how_to_apply": "Apply through Veterinary Department or authorised insurance providers.",
+      "contact_number": "Veterinary Department",
+      "website": "https://dahd.nic.in/",
+      "last_verified": "2026-01-12"
+    },
+
+    {
+      "id": "IND-FISH-005",
+      "name": "Pradhan Mantri Matsya Sampada Yojana (PMMSY)",
+      "category": "livestock_fisheries",
+      "category_label": "Fisheries & Aquaculture Development",
+      "department": "Department of Fisheries, Government of India",
+      "scope": "National Scheme (Implemented in Karnataka)",
+      "location": "Karnataka",
+      "sector": "Fisheries & Aquaculture",
+      "stage": ["Production", "Post-Harvest"],
+      "post_harvest": true,
+
+      "description": "Provides assistance for inland fisheries, aquaculture units, hatcheries, processing, cold chain and marketing.",
+      "benefits": "Infrastructure development, productivity enhancement and market linkage.",
+      "eligibility": "Fish farmers, SHGs, cooperatives, FPOs and fisheries entrepreneurs.",
+      "how_to_apply": "Apply through District Fisheries Office or online portal.",
+      "contact_number": "District Fisheries Office",
+      "website": "https://pmmsy.dof.gov.in/",
+      "last_verified": "2026-01-12"
+    },
+
+    {
+      "id": "KAR-FISH-006",
+      "name": "Karnataka Inland Fisheries & Aquaculture Support Programme",
+      "category": "livestock_fisheries",
+      "category_label": "Aquaculture Assistance",
+      "department": "Department of Fisheries, Government of Karnataka",
+      "scope": "State Support Scheme",
+      "location": "Karnataka",
+      "sector": "Fisheries",
+      "stage": ["Production"],
+      "post_harvest": false,
+
+      "description": "Supports construction of fish ponds, fingerling stocking and inland aquaculture development.",
+      "benefits": "Enhanced fish production and livelihood support.",
+      "eligibility": "Registered fish farmers and waterbody lease holders.",
+      "how_to_apply": "Apply through District Fisheries Development Office.",
+      "contact_number": "District Fisheries Office",
+      "website": "https://fisheries.karnataka.gov.in/",
+      "last_verified": "2026-01-12"
+    },
+
+    {
+      "id": "IND-FISH-007",
+      "name": "Fisheries Post-Harvest & Cold Chain Support (PMMSY Component)",
+      "category": "livestock_fisheries",
+      "category_label": "Fisheries Post-Harvest Infrastructure",
+      "department": "Department of Fisheries, Government of India",
+      "scope": "National Scheme (Applicable in Karnataka)",
+      "location": "Karnataka",
+      "sector": "Post-Harvest & Supply Chain",
+      "stage": ["Post-Harvest", "Processing", "Marketing"],
+      "post_harvest": true,
+
+      "description": "Provides support for ice plants, cold storage, refrigerated transport and fish processing units.",
+      "benefits": "Reduced spoilage, improved quality and better market access.",
+      "eligibility": "FPOs, cooperatives, entrepreneurs and fisheries producer groups.",
+      "how_to_apply": "Apply through District Fisheries Office or State Implementing Agency.",
+      "contact_number": "District Fisheries Office",
+      "website": "https://pmmsy.dof.gov.in/",
+      "last_verified": "2026-01-12"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "state": "Karnataka",
+  "category_key": "energy_pump_support",
+  "category_label": "Energy & Pump Set Support Schemes",
+  "schemes": [
+    {
+      "id": "KAR-ENG-001",
+      "name": "Irrigation Pump Set Energisation Subsidy",
+      "category": "energy_pump_support",
+      "category_label": "Pump Set Energisation Support",
+      "department": "Energy Department & Department of Agriculture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Irrigation & Energy Support",
+      "stage": ["Farm Infrastructure", "Water Management"],
+      "post_harvest": false,
+
+      "description": "Provides financial support for energisation of irrigation pump sets and borewells, including power connection, transformer and wiring works.",
+      "benefits": "Reduces cost burden for farmers in establishing powered irrigation facilities.",
+      "eligibility": "Farmers with sanctioned borewell or dugwell under notified subsidy categories.",
+      "how_to_apply": "Apply through Electricity Supply Company (ESCOM) offices or Raitha Samparka Kendra.",
+      "contact_number": "Concerned ESCOM Office",
+      "website": "https://karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-ENG-002",
+      "name": "Solar Powered Irrigation Pump Subsidy",
+      "category": "energy_pump_support",
+      "category_label": "Solar Pump Subsidy",
+      "department": "Karnataka Renewable Energy Development Limited (KREDL)",
+      "scope": "Central + State Assisted",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Renewable Energy for Agriculture",
+      "stage": ["Farm Infrastructure", "Water Management"],
+      "post_harvest": false,
+
+      "description": "Provides subsidy assistance for installation of off-grid and grid-connected solar irrigation pump sets.",
+      "benefits": "Reduces dependence on diesel and grid electricity for irrigation.",
+      "eligibility": "Priority to unirrigated, remote or power-deficit agricultural regions.",
+      "how_to_apply": "Apply through KREDL or District Agriculture Office.",
+      "contact_number": "KREDL Helpdesk",
+      "website": "https://kredl.karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-ENG-003",
+      "name": "Replacement of Inefficient Irrigation Pump Sets",
+      "category": "energy_pump_support",
+      "category_label": "Energy Efficiency Support",
+      "department": "Energy Department, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Power Efficiency",
+      "stage": ["Farm Infrastructure", "Water Management"],
+      "post_harvest": false,
+
+      "description": "Provides financial assistance to replace old or energy-inefficient pump sets with high-efficiency motors.",
+      "benefits": "Reduces electricity consumption and improves irrigation efficiency.",
+      "eligibility": "Registered farmers with existing grid-connected pump sets.",
+      "how_to_apply": "Apply through ESCOM offices or Agriculture Department.",
+      "contact_number": "Energy Department Office",
+      "website": "https://bescom.karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-ENG-004",
+      "name": "Lift Irrigation & Borewell Motor Support Scheme",
+      "category": "energy_pump_support",
+      "category_label": "Lift Irrigation Support",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka (Notified Regions)",
+      "crop_type": ["Paddy", "Vegetables", "Plantation Crops"],
+      "sector": "Irrigation Infrastructure",
+      "stage": ["Farm Infrastructure", "Water Conveyance"],
+      "post_harvest": false,
+
+      "description": "Provides subsidy assistance for installation of electric motors, pipelines and pump sets for lift irrigation projects.",
+      "benefits": "Improves water availability for crops in elevated or water-scarce regions.",
+      "eligibility": "Farmers with suitable irrigation source or community-based lift irrigation clusters.",
+      "how_to_apply": "Apply through Raitha Samparka Kendra or Taluk Agriculture Office.",
+      "contact_number": "Taluk Agriculture Office",
+      "website": "https://raitamitra.karnataka.gov.in/english",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-ENG-005",
+      "name": "Solar Water Pumping for Dairy & Livestock Farms",
+      "category": "energy_pump_support",
+      "category_label": "Livestock Solar Energy Support",
+      "department": "Department of Animal Husbandry & KREDL",
+      "scope": "State + Central Assisted",
+      "location": "Karnataka",
+      "crop_type": ["Livestock", "Fodder Crops", "Dairy Farms"],
+      "sector": "Livestock Infrastructure",
+      "stage": ["Farm Operations", "Water Management"],
+      "post_harvest": false,
+
+      "description": "Provides subsidy assistance for solar-powered water pumping units for dairy and livestock farms.",
+      "benefits": "Ensures reliable water supply for cattle and fodder cultivation.",
+      "eligibility": "Registered dairy farmers, milk producer cooperatives and livestock farmers.",
+      "how_to_apply": "Apply through Department of Animal Husbandry or KREDL.",
+      "contact_number": "Animal Husbandry Department",
+      "website": "https://karnataka.gov.in/ahvs",
+      "last_verified": "2026-01-10"
+    }
+  ]
+}

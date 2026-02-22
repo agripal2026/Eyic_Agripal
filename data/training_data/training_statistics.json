@@ -1,0 +1,17 @@
+{
+  "total_items": 672,
+  "sources": {
+    "explicit_qa": 132,
+    "instructional": 172,
+    "definition": 148,
+    "section_content": 4,
+    "natural_qa": 21,
+    "disease_treatments": 190,
+    "custom_qa": 5
+  },
+  "categories": {
+    "general": 670,
+    "pest": 1,
+    "irrigation": 1
+  }
+}

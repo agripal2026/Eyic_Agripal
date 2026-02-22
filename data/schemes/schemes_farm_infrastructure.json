@@ -1,0 +1,97 @@
+{
+  "state": "Karnataka",
+  "batch": "Farm Infrastructure & On-Farm Post-Harvest Support Schemes",
+  "schemes": [
+
+    {
+      "scheme_id": "KAR-INF-001",
+      "name": "On-Farm Drying Yard & Threshing Platform Assistance",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "category": "Post-Harvest Drying Infrastructure",
+      "scope": "State Scheme",
+      "location_applicability": "Karnataka",
+      "crop_type": ["Paddy", "Millets", "Pulses", "Oilseeds"],
+      "sector": "On-Farm Post-Harvest Infrastructure",
+      "stage": ["Post-Harvest", "Drying & Threshing"],
+      "post_harvest_relevance": true,
+      "benefit_summary": "Provides subsidy support for construction of on-farm drying yards and threshing platforms to prevent grain damage and moisture losses after harvest.",
+      "eligibility_summary": "Small and marginal farmers; priority to rainfed and dryland regions.",
+      "apply_mode": "Raitha Samparka Kendra / Taluk Agriculture Office",
+      "official_link": "https://raitamitra.karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "scheme_id": "KAR-INF-002",
+      "name": "Assistance for Construction of Farm Storage Sheds",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "category": "Farm Storage Support",
+      "scope": "State Scheme",
+      "location_applicability": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Farm Level Storage",
+      "stage": ["Post-Harvest", "Storage"],
+      "post_harvest_relevance": true,
+      "benefit_summary": "Financial assistance for construction of temporary and semi-permanent storage sheds for safe storage of harvested produce and equipment.",
+      "eligibility_summary": "Individual farmers and farmer groups owning farmland.",
+      "apply_mode": "District Agriculture Office",
+      "official_link": "https://raitamitra.karnataka.gov.in/english",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "scheme_id": "KAR-INF-003",
+      "name": "Rural Farm Road & Field Access Path Development",
+      "department": "Department of Rural Development & Panchayat Raj",
+      "category": "Farm Access Infrastructure",
+      "scope": "State + Local Body Assisted",
+      "location_applicability": "Karnataka (Gram Panchayat Jurisdiction)",
+      "crop_type": ["All Crops"],
+      "sector": "Rural Connectivity",
+      "stage": ["Farm Operations", "Transport to Market"],
+      "post_harvest_relevance": true,
+      "benefit_summary": "Support for creation and improvement of farm approach roads and field access tracks to enable easier movement of produce and machinery.",
+      "eligibility_summary": "Farmers through Gram Panchayat & Village Development Committees.",
+      "apply_mode": "Gram Panchayat / RDPR Department",
+      "official_link": "https://rdpr.karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "scheme_id": "KAR-INF-004",
+      "name": "Farm Boundary Fencing & Crop Protection Assistance",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "category": "Crop Protection & Fencing Support",
+      "scope": "State Scheme",
+      "location_applicability": "Karnataka",
+      "crop_type": ["All Crops"],
+      "sector": "Farm Protection",
+      "stage": ["Cultivation", "Harvest Protection"],
+      "post_harvest_relevance": false,
+      "benefit_summary": "Provides partial financial assistance for installation of farm fencing to prevent crop damage from stray animals and wildlife.",
+      "eligibility_summary": "Priority to small & marginal farmers near wildlife-conflict regions.",
+      "apply_mode": "Taluk Agriculture Office / Forest & Agriculture Joint Scheme Cells",
+      "official_link": "https://raitamitra.karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "scheme_id": "KAR-INF-005",
+      "name": "Construction of On-Farm Produce Collection & Shade Platforms",
+      "department": "Department of Horticulture & Agriculture",
+      "category": "On-Farm Handling Infrastructure",
+      "scope": "State Scheme",
+      "location_applicability": "Karnataka",
+      "crop_type": ["Vegetables", "Fruits", "Perishable Produce"],
+      "sector": "Post-Harvest Handling",
+      "stage": ["Harvest", "Temporary Storage"],
+      "post_harvest_relevance": true,
+      "benefit_summary": "Support for construction of shade and raised platforms for temporary storage, grading and loading of harvested produce at farm level.",
+      "eligibility_summary": "Individual horticulture farmers, SHGs and farmer groups.",
+      "apply_mode": "District Horticulture / Agriculture Department",
+      "official_link": "https://horticulture.karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    }
+
+  ]
+}

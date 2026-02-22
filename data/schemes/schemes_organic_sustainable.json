@@ -1,0 +1,155 @@
+{
+  "state": "Karnataka",
+  "category_key": "organic_sustainable_agriculture",
+  "category_label": "Organic Farming & Sustainable Agriculture Schemes",
+  "schemes": [
+
+    {
+      "id": "IND-ORG-001",
+      "name": "Paramparagat Krishi Vikas Yojana (PKVY)",
+      "category": "organic_sustainable_agriculture",
+      "category_label": "Organic Farming Cluster Development",
+      "department": "Ministry of Agriculture & Farmers Welfare",
+      "scope": "National Scheme (Implemented in Karnataka)",
+      "location": "Karnataka",
+      "sector": "Organic Farming",
+      "stage": ["Pre-Harvest", "Post-Harvest"],
+      "post_harvest": true,
+
+      "description": "Supports formation of organic farming clusters with assistance for organic inputs, certification and market linkage.",
+      "benefits": "Reduced input cost, certified organic produce and better market price realization.",
+      "eligibility": "Groups of farmers adopting organic farming under cluster or FPO model.",
+      "how_to_apply": "Apply through State Organic Mission or designated implementing agencies.",
+      "contact_number": "District Agriculture Office",
+      "website": "https://pgsindia-ncof.gov.in/",
+      "last_verified": "2026-01-12"
+    },
+
+    {
+      "id": "IND-ORG-002",
+      "name": "National Project on Organic Farming (NPOF)",
+      "category": "organic_sustainable_agriculture",
+      "category_label": "Organic Input & Certification Support",
+      "department": "Ministry of Agriculture & Farmers Welfare",
+      "scope": "National Scheme",
+      "location": "Karnataka",
+      "sector": "Organic Inputs",
+      "stage": ["Pre-Harvest"],
+      "post_harvest": false,
+
+      "description": "Provides support for organic input production units, bio-fertilizers, compost and organic certification systems.",
+      "benefits": "Improved availability of organic inputs and promotion of organic practices.",
+      "eligibility": "Entrepreneurs, cooperatives, FPOs and organic farmer groups.",
+      "how_to_apply": "Apply through National Centre of Organic Farming or State Nodal Agencies.",
+      "contact_number": "State Organic Farming Cell",
+      "website": "https://ncof.dacnet.nic.in/",
+      "last_verified": "2026-01-12"
+    },
+
+    {
+      "id": "IND-ORG-003",
+      "name": "National Mission for Sustainable Agriculture (NMSA)",
+      "category": "organic_sustainable_agriculture",
+      "category_label": "Climate Resilient & Sustainable Agriculture",
+      "department": "Ministry of Agriculture & Farmers Welfare",
+      "scope": "Central Scheme (Implemented in Karnataka)",
+      "location": "Karnataka",
+      "sector": "Sustainable Agriculture",
+      "stage": ["Pre-Harvest"],
+      "post_harvest": false,
+
+      "description": "Promotes soil health management, rainfed area development and climate-resilient farming practices.",
+      "benefits": "Improved soil fertility, water efficiency and climate resilience.",
+      "eligibility": "Farmers in notified rainfed and climate-vulnerable regions.",
+      "how_to_apply": "Apply through District Agriculture Office.",
+      "contact_number": "District Agriculture Office",
+      "website": "https://agricoop.gov.in/",
+      "last_verified": "2026-01-12"
+    },
+
+    {
+      "id": "KAR-ORG-004",
+      "name": "Subsidy Assistance for Bio-Fertilizers & Organic Inputs",
+      "category": "organic_sustainable_agriculture",
+      "category_label": "Organic Input Subsidy",
+      "department": "Department of Agriculture, Government of Karnataka",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "sector": "Organic Inputs",
+      "stage": ["Pre-Harvest"],
+      "post_harvest": false,
+
+      "description": "Provides subsidy for bio-fertilizers, vermicompost and approved organic inputs.",
+      "benefits": "Lower cultivation cost and increased adoption of eco-friendly inputs.",
+      "eligibility": "Registered farmers purchasing notified organic inputs.",
+      "how_to_apply": "Apply through Raitha Samparka Kendra (RSK) or Agriculture Department.",
+      "contact_number": "Raitha Samparka Kendra",
+      "website": "https://raitamitra.karnataka.gov.in/",
+      "last_verified": "2026-01-12"
+    },
+
+    {
+      "id": "KAR-ORG-005",
+      "name": "Organic Farming Research & Demonstration Programmes",
+      "category": "organic_sustainable_agriculture",
+      "category_label": "Farmer Training & Demonstration",
+      "department": "University of Agricultural Sciences / Department of Agriculture",
+      "scope": "State Support Programme",
+      "location": "Karnataka",
+      "sector": "Farmer Capacity Building",
+      "stage": ["Pre-Harvest"],
+      "post_harvest": false,
+
+      "description": "Conducts farmer field schools, organic demonstration plots and training programmes.",
+      "benefits": "Skill development, awareness and improved adoption of organic practices.",
+      "eligibility": "Interested farmers and farmer groups.",
+      "how_to_apply": "Apply through KVKs or Agriculture Universities.",
+      "contact_number": "Krishi Vigyan Kendra",
+      "website": "https://kvk.icar.gov.in/",
+      "last_verified": "2026-01-12"
+    },
+
+    {
+      "id": "IND-ORG-006",
+      "name": "Participatory Guarantee System (PGS) Organic Certification",
+      "category": "organic_sustainable_agriculture",
+      "category_label": "Organic Certification & Market Access",
+      "department": "National Centre of Organic Farming",
+      "scope": "National Programme (Used in Karnataka)",
+      "location": "Karnataka",
+      "sector": "Certification & Marketing",
+      "stage": ["Post-Harvest", "Marketing"],
+      "post_harvest": true,
+
+      "description": "Provides a low-cost organic certification system enabling access to organic markets.",
+      "benefits": "Certified produce, premium pricing and consumer trust.",
+      "eligibility": "Organic farmer groups registered under PGS-India.",
+      "how_to_apply": "Register through PGS-India portal or facilitating agencies.",
+      "contact_number": "PGS Facilitating Agency",
+      "website": "https://pgsindia-ncof.gov.in/",
+      "last_verified": "2026-01-12"
+    },
+
+    {
+      "id": "IND-ORG-007",
+      "name": "National Mission on Natural Farming (NMNF)",
+      "category": "organic_sustainable_agriculture",
+      "category_label": "Natural & Low-Cost Farming",
+      "department": "Ministry of Agriculture & Farmers Welfare",
+      "scope": "National Scheme (Extended to States)",
+      "location": "Karnataka",
+      "sector": "Natural Farming",
+      "stage": ["Pre-Harvest"],
+      "post_harvest": false,
+
+      "description": "Promotes natural farming practices with training, on-field support and farmer capacity building.",
+      "benefits": "Reduced cultivation cost, improved soil health and sustainable yields.",
+      "eligibility": "Farmers adopting natural or low-input farming practices.",
+      "how_to_apply": "Apply through State Agriculture Department or Nodal Agencies.",
+      "contact_number": "District Agriculture Office",
+      "website": "https://naturalfarming.niti.gov.in/",
+      "last_verified": "2026-01-12"
+    }
+
+  ]
+}

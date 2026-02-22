@@ -1,0 +1,113 @@
+{
+  "state": "Karnataka",
+  "category_key": "processing_value_addition",
+  "category_label": "Processing & Value Addition Support Schemes",
+  "schemes": [
+
+    {
+      "id": "KAR-PROC-001",
+      "name": "PMFME – Prime Minister Formalization of Micro Food Processing Enterprises",
+      "category": "processing_value_addition",
+      "category_label": "Micro Food Processing Enterprise Support",
+      "department": "Ministry of Food Processing Industries (MoFPI) & Government of Karnataka",
+      "scope": "Central + State Assisted",
+      "location": "Karnataka",
+      "sector": "Food Processing Enterprises",
+      "stage": ["Processing", "Value Addition", "Marketing"],
+      "post_harvest": true,
+
+      "description": "Provides credit-linked subsidy and capacity-building support for establishing and upgrading micro food processing enterprises including packaging, branding and marketing.",
+      "benefits": "Enterprise formalization, improved processing capacity and better market access.",
+      "eligibility": "Individual entrepreneurs, SHGs, FPOs and micro food processing units.",
+      "how_to_apply": "Apply through PMFME portal or State Nodal Agency.",
+      "contact_number": "State PMFME Nodal Office",
+      "website": "https://pmfme.mofpi.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-PROC-002",
+      "name": "Support for Establishment of Millet Processing Units",
+      "category": "processing_value_addition",
+      "category_label": "Millet Value Addition Support",
+      "department": "Department of Agriculture & Karnataka Millet Mission",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "sector": "Millet Processing",
+      "stage": ["Processing", "Packaging", "Market Readiness"],
+      "post_harvest": true,
+
+      "description": "Provides financial assistance for establishment of millet cleaning, de-husking, grading, roasting and flour processing units.",
+      "benefits": "Enhanced millet value addition, reduced post-harvest losses and better marketability.",
+      "eligibility": "FPOs, SHGs, farmer cooperatives and millet producer groups.",
+      "how_to_apply": "Apply through Karnataka Millet Mission or District Agriculture Office.",
+      "contact_number": "District Agriculture Office",
+      "website": "https://millets.karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-PROC-003",
+      "name": "Women SHG Food Processing Enterprise Support",
+      "category": "processing_value_addition",
+      "category_label": "Women Micro-Enterprise Support",
+      "department": "Department of Women & Child Development / NRLM",
+      "scope": "Central + State Assisted",
+      "location": "Karnataka",
+      "sector": "Women Entrepreneurship",
+      "stage": ["Processing", "Micro Enterprise"],
+      "post_harvest": true,
+
+      "description": "Provides seed capital, enterprise incubation support and marketing assistance for women-led food processing activities.",
+      "benefits": "Women empowerment, income generation and enterprise sustainability.",
+      "eligibility": "Women SHGs and registered self-employment groups under NRLM or Stree Shakti.",
+      "how_to_apply": "Apply through Taluk or District NRLM Mission Office.",
+      "contact_number": "NRLM Mission Office",
+      "website": "https://nrlm.gov.in",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-PROC-004",
+      "name": "FPO Processing & Primary Processing Unit Support",
+      "category": "processing_value_addition",
+      "category_label": "FPO Processing Infrastructure",
+      "department": "Department of Agriculture & Small Farmers Agribusiness Consortium",
+      "scope": "Central + State Assisted",
+      "location": "Karnataka",
+      "sector": "Farmer Producer Organisations",
+      "stage": ["Processing", "Aggregation", "Marketing"],
+      "post_harvest": true,
+
+      "description": "Supports establishment of primary processing, grading, cleaning and packaging infrastructure for FPO-based enterprises.",
+      "benefits": "Stronger farmer value chains, improved aggregation and higher farmer income.",
+      "eligibility": "Registered FPOs and Farmer Producer Cooperatives.",
+      "how_to_apply": "Apply through SFAC or Department of Agriculture.",
+      "contact_number": "SFAC District Office",
+      "website": "https://sfacindia.com",
+      "last_verified": "2026-01-10"
+    },
+
+    {
+      "id": "KAR-PROC-005",
+      "name": "Startup Support for Agri & Food Processing Enterprises",
+      "category": "processing_value_addition",
+      "category_label": "Agri & Food Processing Startup Support",
+      "department": "Government of Karnataka – Startup Cell",
+      "scope": "State Scheme",
+      "location": "Karnataka",
+      "sector": "Agri-Entrepreneurship",
+      "stage": ["Processing", "Enterprise Development"],
+      "post_harvest": true,
+
+      "description": "Provides incubation, seed funding and mentorship support for agri and food processing startups.",
+      "benefits": "Startup growth, innovation and job creation in agri value chains.",
+      "eligibility": "Early-stage agritech and food processing startups registered in Karnataka.",
+      "how_to_apply": "Apply through Karnataka Startup portal.",
+      "contact_number": "Karnataka Startup Cell",
+      "website": "https://startup.karnataka.gov.in",
+      "last_verified": "2026-01-10"
+    }
+
+  ]
+}
