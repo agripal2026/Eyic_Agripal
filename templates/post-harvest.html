@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Harvest Management - AgriPal</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --green: #1a9e5c;
+            --green-dark: #137a46;
+            --green-light: #e8f7ef;
+            --green-mid: #2ecc71;
+            --orange: #e67e22;
+            --orange-light: #fef3e8;
+            --blue: #2980b9;
+            --blue-light: #eaf4fb;
+            --red: #e74c3c;
+            --red-light: #fdf0ef;
+            --bg: #f2f6f3;
+            --card-bg: #ffffff;
+            --text-dark: #1a2e22;
+            --text-mid: #4a6657;
+            --text-light: #8aaa97;
+            --border: #d5e8dc;
+            --shadow: 0 4px 20px rgba(26,158,92,0.10);
+            --shadow-hover: 0 10px 36px rgba(26,158,92,0.18);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            background: linear-gradient(135deg, var(--green-dark), var(--green));
+            box-shadow: 0 3px 16px rgba(0,0,0,0.15);
+            padding: 0.6rem 0;
+        }
+        .navbar-brand {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: white !important;
+            letter-spacing: -0.3px;
+        }
+        .nav-link { color: rgba(255,255,255,0.88) !important; font-weight: 600; }
+        .nav-link:hover { color: white !important; }
+        .nav-link.active-nav { color: white !important; border-bottom: 2px solid rgba(255,255,255,0.7); }
+
+        /* ── PAGES — only .active shows ── */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* ── PAGE 1: SERVICES ── */
+        #services-page { padding: 2.5rem 1rem; }
+        .hero-banner {
+            background: linear-gradient(135deg, var(--green), var(--green-dark));
+            color: white;
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            box-shadow: 0 12px 40px rgba(26,158,92,0.30);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -50px; right: -50px;
+            width: 200px; height: 200px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+        }
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; left: -30px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .hero-banner h1 { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 2.2rem; margin-bottom: 0.6rem; position: relative; }
+        .hero-banner p { opacity: 0.88; font-size: 1.05rem; margin: 0; position: relative; }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
+        }
+        .service-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem 1.2rem;
+            cursor: pointer;
+            text-align: center;
+            border: 2px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--green);
+        }
+        .service-card .svc-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+        .service-card h5 { font-family: 'Sora', sans-serif; font-weight: 700; color: var(--text-dark); margin-bottom: 0.4rem; font-size: 1.05rem; }
+        .service-card p { color: var(--text-light); font-size: 0.85rem; margin: 0; }
+
+        /* ── PAGE 2: SHOP TYPE ── */
+        #shop-type-page { padding: 2rem 1rem; }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: white;
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            padding: 0.9rem 1.2rem;
+            box-shadow: 0 2px 10px rgba(26,158,92,0.07);
+        }
+        .section-header > div { flex: 1; }
+        .back-btn {
+            background: var(--card-bg);
+            border: 2px solid var(--green);
+            color: var(--green);
+            padding: 0.55rem 1.4rem;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.22s;
+            white-space: nowrap;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(26,158,92,0.10);
+            letter-spacing: -0.2px;
+        }
+        .back-btn:hover {
+            background: var(--green);
+            color: white;
+            box-shadow: 0 4px 16px rgba(26,158,92,0.25);
+            transform: translateY(-1px);
+        }
+        .back-btn:active { transform: translateY(0); }
+
+        .shop-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.4rem;
+        }
+        .shop-type-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.2rem 1.5rem;
+            cursor: pointer;
+            text-align: center;
+            border: 2.5px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .shop-type-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); }
+        .shop-type-card .icon { font-size: 2.8rem; margin-bottom: 0.9rem; display: block; }
+        .shop-type-card h5 { font-family: 'Sora', sans-serif; font-weight: 700; margin-bottom: 0.4rem; font-size: 1.1rem; }
+        .shop-type-card p { color: var(--text-light); font-size: 0.84rem; margin: 0; }
+
+        .card-govt { border-color: #3498db !important; }
+        .card-govt:hover { border-color: #2980b9 !important; box-shadow: 0 10px 36px rgba(41,128,185,0.22) !important; }
+        .card-govt h5 { color: #2980b9; }
+
+        .card-organic { border-color: var(--green) !important; }
+        .card-organic:hover { border-color: var(--green-dark) !important; box-shadow: var(--shadow-hover) !important; }
+        .card-organic h5 { color: var(--green); }
+
+        .card-chemical { border-color: #e67e22 !important; }
+        .card-chemical:hover { border-color: #d35400 !important; box-shadow: 0 10px 36px rgba(230,126,34,0.22) !important; }
+        .card-chemical h5 { color: #e67e22; }
+
+        /* ── PAGE 3: RESULTS ── */
+        #results-section { padding: 1rem; }
+        .results-header {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1rem 1.4rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        .results-header h4 { margin: 0; font-family: 'Sora', sans-serif; font-weight: 700; color: var(--text-dark); font-size: 1.1rem; }
+        .results-header p { margin: 0; color: var(--text-light); font-size: 0.84rem; }
+
+        .results-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 1rem;
+        }
+        @media (max-width: 900px) { .results-layout { grid-template-columns: 1fr; } }
+
+        #map {
+            height: 540px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            z-index: 1;
+        }
+
+        /* ── LIST PANEL ── */
+        .list-panel {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 540px;
+        }
+        .list-panel-header {
+            padding: 0.9rem 1.1rem;
+            background: var(--green-light);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .list-panel-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+        .list-panel-header-row span { font-weight: 800; color: var(--green-dark); font-size: 0.95rem; }
+        .count-badge {
+            background: var(--green);
+            color: white;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .shop-filters { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .filter-btn {
+            padding: 0.25rem 0.85rem;
+            border-radius: 20px;
+            border: 2px solid var(--border);
+            background: white;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text-mid);
+            transition: all 0.2s;
+        }
+        .filter-btn.active { background: var(--green); color: white; border-color: var(--green); }
+        .filter-btn:hover:not(.active) { border-color: var(--green); color: var(--green); }
+
+        #list-content { overflow-y: auto; flex: 1; padding: 0.8rem; }
+
+        /* ── LIST ITEMS ── */
+        .list-item {
+            background: white;
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            transition: all 0.22s;
+            border-left: 4px solid var(--green);
+        }
+        .list-item:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateX(3px);
+            border-color: var(--green);
+        }
+        .list-item.type-govt { border-left-color: #3498db; }
+        .list-item.type-organic { border-left-color: var(--green); }
+        .list-item.type-chemical { border-left-color: var(--orange); }
+        .list-item.type-market { border-left-color: #9b59b6; }
+        .list-item.type-storage { border-left-color: #2980b9; }
+
+        .item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+        .item-name { font-weight: 800; color: var(--text-dark); font-size: 0.92rem; line-height: 1.3; flex: 1; margin-right: 0.5rem; }
+        .item-icon { font-size: 1.4rem; flex-shrink: 0; }
+
+        .distance-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: linear-gradient(135deg, var(--green-mid), var(--green));
+            color: white;
+            padding: 0.15rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .item-meta { font-size: 0.8rem; color: var(--text-mid); margin-bottom: 0.2rem; }
+        .item-meta i { width: 14px; margin-right: 4px; }
+
+        .services-row { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.5rem 0; }
+        .svc-tag {
+            background: var(--green-light);
+            color: var(--green-dark);
+            border: 1px solid var(--border);
+            padding: 0.15rem 0.55rem;
+            border-radius: 8px;
+            font-size: 0.71rem;
+            font-weight: 700;
+        }
+        .svc-tag.chemical { background: #fff3e8; color: #b7590a; border-color: #fdd8b5; }
+        .svc-tag.organic { background: var(--green-light); color: var(--green-dark); }
+
+        .type-pill {
+            display: inline-block;
+            padding: 0.2rem 0.7rem;
+            border-radius: 10px;
+            font-size: 0.71rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+        .type-pill.govt { background: #eaf4fb; color: #2980b9; }
+        .type-pill.organic { background: var(--green-light); color: var(--green-dark); }
+        .type-pill.chemical { background: #fff3e8; color: #e67e22; }
+
+        .item-actions { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
+        .btn-navigate {
+            flex: 1;
+            background: linear-gradient(135deg, var(--green-mid), var(--green));
+            color: white;
+            border: none;
+            padding: 0.45rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-navigate:hover { opacity: 0.88; }
+        .btn-products {
+            flex: 1;
+            background: white;
+            color: var(--green);
+            border: 2px solid var(--green);
+            padding: 0.45rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-products:hover { background: var(--green); color: white; }
+
+        /* ── LOADING ── */
+        .loading-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        .spinner-ring {
+            width: 44px; height: 44px;
+            border: 4px solid var(--border);
+            border-top-color: var(--green);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem 1rem;
+        }
+        .empty-state .empty-icon { font-size: 3rem; margin-bottom: 0.8rem; }
+        .empty-state h6 { font-weight: 800; color: var(--text-mid); margin-bottom: 0.3rem; }
+        .empty-state p { font-size: 0.84rem; color: var(--text-light); }
+
+        /* ── PAGE 4: SCHEMES ── */
+        #schemes-page { padding: 1.5rem 1rem; }
+        .schemes-search-bar { position: relative; margin-bottom: 1.2rem; }
+        .schemes-search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            background: white;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+        .schemes-search-bar input:focus { border-color: var(--green); }
+        .schemes-search-bar .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .category-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
+        .cat-pill {
+            padding: 0.35rem 1rem;
+            border-radius: 20px;
+            border: 2px solid var(--border);
+            background: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text-mid);
+            transition: all 0.2s;
+        }
+        .cat-pill.active, .cat-pill:hover { background: var(--green); color: white; border-color: var(--green); }
+
+        .schemes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.1rem;
+        }
+
+        .scheme-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.3rem;
+            border: 1.5px solid var(--border);
+            cursor: pointer;
+            transition: all 0.22s;
+            position: relative;
+            overflow: hidden;
+        }
+        .scheme-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--green-mid), var(--green));
+        }
+        .scheme-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-4px);
+            border-color: var(--green);
+        }
+        .scheme-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; }
+        .scheme-name { font-family: 'Sora', sans-serif; font-weight: 700; color: var(--text-dark); font-size: 0.95rem; line-height: 1.35; flex: 1; margin-right: 0.5rem; }
+        .scheme-cat-pill {
+            background: var(--green-light);
+            color: var(--green-dark);
+            padding: 0.15rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .scheme-desc { font-size: 0.83rem; color: var(--text-mid); line-height: 1.5; margin-bottom: 0.8rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .scheme-benefits {
+            background: linear-gradient(135deg, #eaf4fb, #d6ecf8);
+            border-left: 3px solid var(--blue);
+            border-radius: 0 10px 10px 0;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.8rem;
+            color: #1a5276;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .scheme-footer { display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem; color: var(--text-light); border-top: 1px solid var(--border); padding-top: 0.6rem; }
+
+        /* ── MODALS ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+        .modal-overlay.show { display: flex; align-items: flex-start; justify-content: center; }
+        .modal-box {
+            background: white;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 740px;
+            max-height: 88vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.30);
+            margin: auto;
+        }
+        .modal-head {
+            background: linear-gradient(135deg, var(--green-mid), var(--green-dark));
+            color: white;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .modal-head h5 { margin: 0; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.1rem; }
+        .modal-head small { opacity: 0.82; font-size: 0.82rem; }
+        .modal-close-btn {
+            background: rgba(255,255,255,0.18);
+            border: none;
+            color: white;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.2s;
+            margin-left: 1rem;
+        }
+        .modal-close-btn:hover { background: rgba(255,255,255,0.32); }
+        .modal-body-scroll { overflow-y: auto; flex: 1; padding: 1.2rem 1.4rem; }
+
+        /* Product items in modal */
+        .product-item {
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 0.9rem;
+            margin-bottom: 0.7rem;
+            border-left: 3px solid var(--green);
+            background: var(--green-light);
+        }
+        .product-name { font-weight: 800; color: var(--text-dark); font-size: 0.9rem; margin-bottom: 0.4rem; }
+        .product-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.4rem; }
+        .ptag {
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--green-dark);
+            padding: 0.12rem 0.55rem;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+        .ptag.price { background: #fef9e7; border-color: #f9ca24; color: #7d6608; }
+        .ptag.chemical { background: #fff3e8; border-color: #f0a868; color: #8a3a0a; }
+        .product-use { font-size: 0.78rem; color: var(--text-mid); margin: 0; }
+
+        /* Scheme modal */
+        #scheme-modal .modal-head { background: linear-gradient(135deg, #e67e22, #ca6f1e); }
+        .scheme-section {
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+        }
+        .scheme-section h6 { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 0.92rem; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
+        .scheme-section p { font-size: 0.87rem; line-height: 1.6; margin: 0; }
+
+        .scheme-section.desc { background: #f8f9fa; border: 1px solid #e2e8f0; }
+        .scheme-section.elig { background: #fef9e7; border: 1px solid #fde68a; }
+        .scheme-section.bene { background: var(--blue-light); border-left: 4px solid var(--blue); }
+        .scheme-section.apply { background: var(--green-light); border: 1px solid var(--border); }
+
+        .scheme-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1rem; }
+        @media (max-width: 600px) { .scheme-contact-grid { grid-template-columns: 1fr; } }
+        .contact-card {
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            border: 1.5px solid;
+            transition: all 0.2s;
+        }
+        .contact-card:hover { transform: translateY(-2px); }
+        .contact-card.phone { background: var(--green-light); border-color: var(--border); color: var(--text-dark); }
+        .contact-card.website { background: var(--blue-light); border-color: #b8d9ef; color: var(--text-dark); }
+        .contact-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: white; flex-shrink: 0; }
+        .contact-icon.green { background: var(--green); }
+        .contact-icon.blue { background: var(--blue); }
+        .contact-label { font-size: 0.72rem; color: var(--text-light); font-weight: 700; }
+        .contact-value { font-weight: 800; font-size: 0.9rem; }
+
+        .modal-footer-btns {
+            background: #f8f9fa;
+            border-top: 1px solid var(--border);
+            padding: 1rem 1.4rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.7rem;
+            flex-shrink: 0;
+        }
+        .btn-apply {
+            background: linear-gradient(135deg, #e67e22, #ca6f1e);
+            color: white;
+            border: none;
+            padding: 0.55rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .btn-close-modal {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.55rem 1.3rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+        }
+
+        /* Results count banner in list */
+        .results-count-banner {
+            background: var(--green-light);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.6rem 0.9rem;
+            margin-bottom: 0.8rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--green-dark);
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="fas fa-leaf me-2"></i>AgriPal</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-home me-1"></i>Home</a></li>
+                <li class="nav-item"><a class="nav-link active-nav" href="/post-harvest"><i class="fas fa-warehouse me-1"></i>Post-Harvest</a></li>
+                <li class="nav-item"><a class="nav-link" href="/schemes"><i class="fas fa-file-invoice-dollar me-1"></i>Schemes</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══════════════════════════════════
+     PAGE 1 — SERVICES LANDING
+═══════════════════════════════════ -->
+<div id="services-page" class="page active">
+    <!-- Auto-redirect overlay: shown briefly when coming from result page -->
+    <div id="auto-redirect-overlay" style="display:none; position:fixed; inset:0; background:rgba(255,255,255,0.92); z-index:9999; flex-direction:column; align-items:center; justify-content:center; gap:16px;">
+        <div style="width:52px;height:52px;border:5px solid #e0f0e8;border-top-color:#1a9e5c;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1.1rem;color:#1a2e22;" id="overlay-text">Getting your location...</div>
+        <div style="font-size:0.85rem;color:#8aaa97;">Finding nearby shops for you</div>
+    </div>
+    <div class="container" style="max-width:900px;">
+        <div class="hero-banner">
+            <h1><i class="fas fa-warehouse me-2"></i>Post-Harvest Management</h1>
+            <p>Find agro shops, markets, cold storage &amp; government schemes near you</p>
+        </div>
+        <div class="service-grid">
+            <div class="service-card" onclick="navigateToService('shops')">
+                <span class="svc-icon">🌿</span>
+                <h5>Agro Shops</h5>
+                <p>Government &amp; organic input shops near you</p>
+            </div>
+            <div class="service-card" onclick="navigateToService('markets')">
+                <span class="svc-icon">🏪</span>
+                <h5>Markets</h5>
+                <p>Nearby mandis and agricultural markets</p>
+            </div>
+            <div class="service-card" onclick="navigateToService('storage')">
+                <span class="svc-icon">❄️</span>
+                <h5>Cold Storage</h5>
+                <p>Find cold storage facilities nearby</p>
+            </div>
+            <div class="service-card" onclick="navigateToService('schemes')">
+                <span class="svc-icon">📋</span>
+                <h5>Govt Schemes</h5>
+                <p>Subsidies, loans &amp; support programs</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 2 — SHOP TYPE SELECTION
+═══════════════════════════════════ -->
+<div id="shop-type-page" class="page">
+    <div class="container" style="max-width:720px; padding-top:2rem;">
+        <div class="section-header">
+            <button class="back-btn" onclick="backToServices()">
+                <i class="fas fa-arrow-left me-1"></i> Back
+            </button>
+            <div>
+                <h4 class="mb-0 fw-bold" style="font-family:'Sora',sans-serif;">Choose Shop Type</h4>
+                <p class="mb-0 small" style="color:var(--text-light);">Select which type of agro shop to find near you</p>
+            </div>
+        </div>
+        <div class="shop-type-grid">
+            <div class="shop-type-card card-govt" onclick="selectFacility('government')">
+                <span class="icon">🏛️</span>
+                <h5>Government</h5>
+                <p>Subsidized inputs &amp; government support</p>
+            </div>
+            <div class="shop-type-card card-organic" onclick="selectFacility('organic')">
+                <span class="icon">🌿</span>
+                <h5>Organic</h5>
+                <p>Natural &amp; organic farming products</p>
+            </div>
+            <div class="shop-type-card card-chemical" onclick="selectFacility('chemical')">
+                <span class="icon">🧪</span>
+                <h5>Chemical / Pesticide</h5>
+                <p>Pesticides, fertilizers &amp; chemicals</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 3 — RESULTS (Map + List)
+═══════════════════════════════════ -->
+<div id="results-section" class="page">
+    <div class="container-fluid px-3" style="max-width:1320px; padding-top:1rem;">
+
+        <!-- Header -->
+        <div class="results-header" style="position:sticky;top:60px;z-index:50;background:white;">
+            <div>
+                <h4 id="results-title">Nearby Facilities</h4>
+                <p id="results-subtitle">Use the map to explore</p>
+            </div>
+            <button class="back-btn" onclick="goBack()" style="background:var(--green);color:white;">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+
+        <!-- Grid -->
+        <div class="results-layout">
+            <!-- MAP -->
+            <div id="map"></div>
+
+            <!-- LIST PANEL -->
+            <div class="list-panel">
+                <div class="list-panel-header">
+                    <div class="list-panel-header-row">
+                        <span><i class="fas fa-list-ul me-1"></i> Results</span>
+                        <span id="results-count" class="count-badge">0</span>
+                    </div>
+                    <div class="shop-filters mt-2" id="shop-filter-container" style="display:none;">
+                        <button class="filter-btn active" id="filter-all" onclick="filterShops('all')">All</button>
+                        <button class="filter-btn" id="filter-organic" onclick="filterShops('organic')">🌿 Organic</button>
+                        <button class="filter-btn" id="filter-govt" onclick="filterShops('government')">🏛️ Govt</button>
+                        <button class="filter-btn" id="filter-chemical" onclick="filterShops('chemical')">🧪 Chemical</button>
+                    </div>
+                </div>
+                <div id="list-content">
+                    <div class="loading-state">
+                        <div class="spinner-ring"></div>
+                        <p class="text-muted small">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 4 — SCHEMES
+═══════════════════════════════════ -->
+<div id="schemes-page" class="page">
+    <div class="container" style="max-width:1100px; padding-top:1.5rem;">
+        <div class="section-header mb-3">
+            <button class="back-btn" onclick="backToServices()">
+                <i class="fas fa-arrow-left me-1"></i> Back
+            </button>
+            <div>
+                <h4 class="mb-0 fw-bold" style="font-family:'Sora',sans-serif;">Government Schemes</h4>
+                <p class="mb-0 small" style="color:var(--text-light);">Subsidies, loans &amp; support programs for farmers</p>
+            </div>
+        </div>
+        <div class="schemes-search-bar">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="schemes-search" placeholder="Search schemes by name, department, or benefit..." oninput="handleSchemeSearch(this.value)">
+        </div>
+        <div class="category-pills" id="categories-container">
+            <button class="cat-pill active" id="cat-all" onclick="filterByCategory('all')">All Schemes</button>
+        </div>
+        <div id="schemes-list">
+            <div class="loading-state">
+                <div class="spinner-ring"></div>
+                <p class="text-muted small">Loading schemes...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     PRODUCT / PRICING MODAL
+═══════════════════════════════════ -->
+<div id="product-modal" class="modal-overlay" onclick="closeProductModalOnBackdrop(event)">
+    <div class="modal-box">
+        <div class="modal-head">
+            <div>
+                <h5 id="modal-shop-name">Products &amp; Pricing</h5>
+                <small id="modal-shop-location"></small>
+            </div>
+            <button class="modal-close-btn" onclick="closeProductModal()">✕</button>
+        </div>
+        <div class="modal-body-scroll" id="modal-products-list"></div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     SCHEME DETAIL MODAL
+═══════════════════════════════════ -->
+<div id="scheme-modal" class="modal-overlay" onclick="closeSchemeModalOnBackdrop(event)">
+    <div class="modal-box">
+        <div class="modal-head" id="scheme-modal-head">
+            <div style="flex:1;">
+                <h5 id="scheme-modal-title">Scheme Details</h5>
+                <small id="scheme-modal-cat"></small>
+            </div>
+            <button class="modal-close-btn" onclick="closeSchemeModal()">✕</button>
+        </div>
+        <div class="modal-body-scroll" id="scheme-modal-body"></div>
+        <div class="modal-footer-btns" id="scheme-modal-footer"></div>
+    </div>
+</div>
+
+
+<!-- JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+window.AUTO_SECTION    = "{{ auto_section   | default('') }}";
+window.AUTO_SHOP_TYPE = "{{ auto_shop_type | default('') }}";
+</script>
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+
+<script>
+/* ─── Product / Pricing Modal ─── */
+function showProductPrices(shopName, shopLocation, products, isChemical) {
+    document.getElementById('modal-shop-name').textContent = shopName;
+    document.getElementById('modal-shop-location').textContent = '📍 ' + (shopLocation || '');
+    const container = document.getElementById('modal-products-list');
+
+    if (!products || products.length === 0) {
+        container.innerHTML = '<p class="text-muted text-center py-4">No product data available.</p>';
+    } else {
+        container.innerHTML = products.map(p => `
+            <div class="product-item">
+                <div class="product-name">${p.name || 'Product'}</div>
+                <div class="product-tags">
+                    <span class="ptag price">💰 ${p.price || 'N/A'}</span>
+                    ${p.unit ? `<span class="ptag">📦 ${p.unit}</span>` : ''}
+                    ${p.dosage ? `<span class="ptag ${isChemical ? 'chemical' : ''}">🌱 ${p.dosage}</span>` : ''}
+                    ${p.frequency ? `<span class="ptag">🔁 ${p.frequency}</span>` : ''}
+                </div>
+                ${p.use_for ? `<p class="product-use"><strong>Use for:</strong> ${p.use_for}</p>` : ''}
+            </div>
+        `).join('');
+    }
+
+    document.getElementById('product-modal').classList.add('show');
+}
+
+function closeProductModal() {
+    document.getElementById('product-modal').classList.remove('show');
+}
+
+function closeProductModalOnBackdrop(e) {
+    if (e.target === document.getElementById('product-modal')) closeProductModal();
+}
+
+/* ─── Scheme Modal ─── */
+function showSchemeDetail(scheme) {
+    document.getElementById('scheme-modal-title').textContent = scheme.name || 'Scheme';
+    document.getElementById('scheme-modal-cat').textContent = scheme.category_label || '';
+
+    const body = document.getElementById('scheme-modal-body');
+    body.innerHTML = `
+        ${scheme.description ? `
+        <div class="scheme-section desc">
+            <h6><i class="fas fa-info-circle text-secondary"></i> Description</h6>
+            <p>${scheme.description}</p>
+        </div>` : ''}
+
+        ${scheme.eligibility ? `
+        <div class="scheme-section elig">
+            <h6><i class="fas fa-user-check" style="color:#e67e22"></i> Eligibility</h6>
+            <p>${scheme.eligibility}</p>
+        </div>` : ''}
+
+        ${scheme.benefits ? `
+        <div class="scheme-section bene">
+            <h6><i class="fas fa-gift" style="color:#2980b9"></i> Benefits</h6>
+            <p>${scheme.benefits}</p>
+        </div>` : ''}
+
+        ${scheme.how_to_apply ? `
+        <div class="scheme-section apply">
+            <h6><i class="fas fa-clipboard-list" style="color:var(--green)"></i> How to Apply</h6>
+            <p>${scheme.how_to_apply}</p>
+        </div>` : ''}
+
+        <div class="scheme-contact-grid">
+            ${scheme.contact_number ? `
+            <a href="tel:${scheme.contact_number}" class="contact-card phone">
+                <div class="contact-icon green"><i class="fas fa-phone"></i></div>
+                <div>
+                    <div class="contact-label">Helpline</div>
+                    <div class="contact-value">${scheme.contact_number}</div>
+                </div>
+            </a>` : ''}
+            ${scheme.website ? `
+            <a href="${scheme.website}" target="_blank" class="contact-card website">
+                <div class="contact-icon blue"><i class="fas fa-globe"></i></div>
+                <div>
+                    <div class="contact-label">Official Website</div>
+                    <div class="contact-value">Apply Online →</div>
+                </div>
+            </a>` : ''}
+        </div>
+    `;
+
+    const footer = document.getElementById('scheme-modal-footer');
+    footer.innerHTML = `
+        ${scheme.website ? `<a href="${scheme.website}" target="_blank" class="btn-apply"><i class="fas fa-external-link-alt"></i> Visit Website</a>` : ''}
+        <button onclick="closeSchemeModal()" class="btn-close-modal"><i class="fas fa-times me-1"></i> Close</button>
+    `;
+
+    document.getElementById('scheme-modal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeSchemeModal() {
+    document.getElementById('scheme-modal').classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+function closeSchemeModalOnBackdrop(e) {
+    if (e.target === document.getElementById('scheme-modal')) closeSchemeModal();
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Requests - AgriPal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --primary-color: #2e7d32; --accent-color: #ffd54f; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height:100vh; position:relative; }
+        .background-layer { position:fixed; top:0; left:0; width:100%; height:100%; background: linear-gradient(135deg,#e8f5e9,#c8e6c9); z-index:0; }
+        .background-pattern { position:fixed; top:0; left:0; width:100%; height:100%; opacity:0.1; background-image: repeating-linear-gradient(45deg,transparent,transparent 35px,rgba(46,125,50,0.1) 35px,rgba(46,125,50,0.1) 70px); z-index:0; }
+        .content-wrapper { position:relative; z-index:1; }
+        .navbar { background: linear-gradient(135deg,#1b5e20,#2e7d32); color:white; padding:15px 30px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 15px rgba(0,0,0,0.2); position:sticky; top:0; z-index:100; }
+        .navbar-brand { font-size:24px; font-weight:bold; display:flex; align-items:center; gap:10px; }
+        .navbar-brand i { font-size:28px; color:var(--accent-color); animation:pulse 2s infinite; }
+        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+        .navbar-center { display:flex; gap:25px; }
+        .navbar-center a { color:white; text-decoration:none; font-weight:600; padding:8px 15px; border-radius:25px; transition:all 0.3s ease; }
+        .navbar-center a:hover { background:rgba(255,255,255,0.2); transform:translateY(-2px); }
+        .navbar-user { display:flex; align-items:center; gap:20px; }
+        .btn-logout { background:rgba(255,255,255,0.2); padding:8px 20px; border-radius:25px; text-decoration:none; color:white; transition:all 0.3s; font-weight:600; display:inline-flex; align-items:center; gap:8px; }
+        .btn-logout:hover { background:rgba(255,255,255,0.3); transform:translateY(-2px); }
+        .container { max-width:1100px; margin:0 auto; padding:30px 20px; }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        .section { background:linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,255,255,0.9)); padding:30px; border-radius:20px; margin-bottom:25px; box-shadow:0 8px 25px rgba(0,0,0,0.1); border:2px solid rgba(46,125,50,0.2); animation:fadeInUp 0.6s ease-out; animation-fill-mode:both; }
+        .section-title { font-size:22px; margin-bottom:20px; color:var(--primary-color); border-bottom:3px solid var(--primary-color); padding-bottom:12px; display:flex; align-items:center; gap:10px; }
+        .stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:20px; margin-bottom:25px; }
+        .stat-card { background:linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,255,255,0.9)); padding:25px; border-radius:20px; box-shadow:0 8px 25px rgba(0,0,0,0.1); text-align:center; border:2px solid rgba(46,125,50,0.2); animation:fadeInUp 0.6s ease-out; animation-fill-mode:both; }
+        .stat-card:nth-child(1){animation-delay:0.1s} .stat-card:nth-child(2){animation-delay:0.2s} .stat-card:nth-child(3){animation-delay:0.3s}
+        .stat-icon { font-size:2.5rem; margin-bottom:10px; }
+        .stat-value { font-size:2rem; font-weight:bold; color:var(--primary-color); }
+        .stat-label { color:#666; font-size:14px; font-weight:600; }
+        .request-card { background:white; border-radius:15px; padding:25px; margin-bottom:20px; border:2px solid rgba(46,125,50,0.1); box-shadow:0 4px 15px rgba(0,0,0,0.07); transition:all 0.3s; }
+        .request-card:hover { transform:translateY(-3px); box-shadow:0 8px 25px rgba(0,0,0,0.12); border-color:rgba(46,125,50,0.3); }
+        .request-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:15px; flex-wrap:wrap; gap:10px; }
+        .request-crop { font-size:1.1rem; font-weight:700; color:var(--primary-color); display:flex; align-items:center; gap:8px; }
+        .request-date { font-size:13px; color:#999; }
+        .request-desc { color:#555; font-size:14px; margin-bottom:15px; line-height:1.6; }
+        .request-img { width:100px; height:100px; object-fit:cover; border-radius:12px; border:3px solid #c8e6c9; margin-bottom:15px; cursor:pointer; transition:transform 0.3s; }
+        .request-img:hover { transform:scale(1.05); }
+        .reply-box { border-radius:12px; padding:18px; margin-top:10px; }
+        .reply-waiting { background:#fff8e1; border-left:4px solid #ffc107; }
+        .reply-received { background:#e8f5e9; border-left:4px solid #4caf50; }
+        .reply-label { font-weight:700; font-size:14px; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+        .reply-text { font-size:15px; color:#333; line-height:1.6; }
+        .badge-waiting { background:#fff3cd; color:#856404; padding:5px 14px; border-radius:20px; font-size:12px; font-weight:600; }
+        .badge-replied { background:#d1e7dd; color:#0a3622; padding:5px 14px; border-radius:20px; font-size:12px; font-weight:600; }
+        .empty-state { text-align:center; padding:60px 20px; color:#999; }
+        .empty-state i { font-size:4rem; margin-bottom:20px; opacity:0.5; }
+        .action-btn { display:inline-flex; align-items:center; gap:10px; padding:15px 25px; background:linear-gradient(135deg,#1b5e20,#2e7d32); color:white; border-radius:15px; text-decoration:none; transition:all 0.3s; font-weight:600; font-size:15px; box-shadow:0 4px 15px rgba(46,125,50,0.3); margin:5px; }
+        .action-btn:hover { transform:translateY(-5px); box-shadow:0 8px 25px rgba(46,125,50,0.4); }
+        @media(max-width:768px){.navbar{flex-direction:column;gap:15px}.navbar-center{display:none}.navbar-user{width:100%;justify-content:space-between}.request-img{width:75px;height:75px}}
+    </style>
+</head>
+<body>
+<div class="background-layer"></div>
+<div class="background-pattern"></div>
+<div class="content-wrapper">
+
+    <nav class="navbar">
+        <div class="navbar-brand"><i class="fas fa-leaf"></i> AgriPal</div>
+        <div class="navbar-center">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('detection_tool') }}">Detection</a>
+            <a href="{{ url_for('post_harvest_page') }}">Post-Harvest</a>
+            <a href="{{ url_for('library') }}">Library</a>
+            <a href="{{ url_for('about_us') }}">About</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+        </div>
+        <div class="navbar-user">
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('auth.logout') }}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- STATS -->
+        {% set replied_count = rows | selectattr(7) | list | length %}
+        {% set waiting_count = rows | length - replied_count %}
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">📋</div>
+                <div class="stat-value">{{ rows|length }}</div>
+                <div class="stat-label">Total Requests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-value" style="color:#2e7d32">{{ replied_count }}</div>
+                <div class="stat-label">Replies Received</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏳</div>
+                <div class="stat-value" style="color:#f57c00">{{ waiting_count }}</div>
+                <div class="stat-label">Awaiting Reply</div>
+            </div>
+        </div>
+
+        <!-- REQUEST LIST -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-inbox"></i> My Requests & Expert Replies
+                <span style="margin-left:auto;font-size:14px;color:#999;font-weight:400;">Phone: {{ phone }}</span>
+            </h2>
+
+            {% if rows %}
+                {% for r in rows %}
+                <div class="request-card">
+                    <div class="request-header">
+                        <div class="request-crop">
+                            <i class="fas fa-seedling"></i>
+                            {{ r[2] or 'Crop not specified' }}
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                            {% if r[7] %}
+                            <span class="badge-replied"><i class="fas fa-check-circle"></i> Replied</span>
+                            {% else %}
+                            <span class="badge-waiting"><i class="fas fa-clock"></i> Waiting</span>
+                            {% endif %}
+                            <span class="request-date"><i class="fas fa-calendar"></i> {{ r[6] }}</span>
+                        </div>
+                    </div>
+
+                    {% if r[3] %}
+                    <div class="request-desc"><strong>Problem:</strong> {{ r[3] }}</div>
+                    {% endif %}
+
+                    {% if r[4] %}
+                    <img src="/{{ r[4] }}" class="request-img" alt="Plant Photo" onclick="this.style.width=this.style.width=='100%'?'100px':'100%'">
+                    {% endif %}
+
+                    <div class="reply-box {% if r[7] %}reply-received{% else %}reply-waiting{% endif %}">
+                        {% if r[7] %}
+                        <div class="reply-label" style="color:#2e7d32"><i class="fas fa-user-tie"></i> Expert Reply:</div>
+                        <div class="reply-text">{{ r[7] }}</div>
+                        {% else %}
+                        <div class="reply-label" style="color:#856404"><i class="fas fa-clock"></i> Waiting for expert reply...</div>
+                        <div style="font-size:13px;color:#888">Our team will review your request and reply within 24–48 hours.</div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-folder-open"></i>
+                <p style="font-size:1.1rem;">No requests found for this phone number.</p>
+                <a href="/talk-to-expert" class="action-btn" style="margin-top:20px;display:inline-flex">
+                    <i class="fas fa-plus-circle"></i> Submit Your First Request
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- ACTIONS -->
+        <div style="text-align:center;padding-bottom:30px;">
+            <a href="/talk-to-expert" class="action-btn"><i class="fas fa-plus-circle"></i> New Request</a>
+            <a href="{{ url_for('detection_tool') }}" class="action-btn"><i class="fas fa-camera"></i> Detection Tool</a>
+            <a href="{{ url_for('dashboard') }}" class="action-btn"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({ pageLanguage:'en', layout:google.translate.TranslateElement.InlineLayout.SIMPLE, includedLanguages:'en,hi,te,ta,kn,ml,gu,pa,bn,mr,or,as' }, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

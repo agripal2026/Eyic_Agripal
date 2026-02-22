@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriPal - Smart Plant Disease Detection</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #a5d6a7;
+            --accent-color: #ffd54f;
+            --text-light: #ffffff;
+            --text-dark: #263238;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            --border-radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f9f9f9; color: var(--text-dark); line-height: 1.6; }
+
+        /* ── HEADER ── */
+        header {
+            background: linear-gradient(to right, var(--primary-color), #1b5e20);
+            color: var(--text-light);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; text-decoration: none; color: var(--text-light); }
+        .logo i { font-size: 2rem; margin-right: 10px; color: var(--accent-color); }
+        .logo-text { font-size: 1.8rem; font-weight: 700; }
+        nav ul { display: flex; list-style: none; }
+        nav ul li { margin-left: 30px; }
+        nav ul li a {
+            color: var(--text-light); text-decoration: none; font-weight: 600;
+            font-size: 1.05rem; transition: color 0.3s; position: relative;
+        }
+        nav ul li a::after {
+            content: ''; position: absolute; width: 0; height: 3px;
+            background: var(--accent-color); bottom: -5px; left: 0; transition: width 0.3s;
+        }
+        nav ul li a:hover::after { width: 100%; }
+        .mobile-menu-btn { display: none; background: none; border: none; color: var(--text-light); font-size: 1.5rem; cursor: pointer; }
+
+        /* ── HERO ── */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.58), rgba(0,0,0,0.58)),
+                url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1600') center/cover no-repeat;
+            height: 100vh;
+            display: flex; align-items: center; text-align: center;
+            color: var(--text-light); padding-top: 80px;
+        }
+        .hero-content { max-width: 820px; margin: 0 auto; padding: 0 20px; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; animation: fadeInUp 0.9s ease; }
+        .hero p { font-size: 1.25rem; margin-bottom: 35px; animation: fadeInUp 1.1s ease; opacity: 0.92; }
+        .hero-buttons { animation: fadeInUp 1.3s ease; }
+
+        .btn {
+            display: inline-block; padding: 13px 32px; border-radius: var(--border-radius);
+            text-decoration: none; font-weight: 600; font-size: 1.05rem;
+            transition: all 0.3s; border: none; cursor: pointer; margin: 8px; box-shadow: var(--shadow);
+        }
+        .btn-primary { background-color: var(--primary-color); color: white; }
+        .btn-primary:hover { background-color: #1b5e20; transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.25); }
+        .btn-secondary { background-color: transparent; border: 2px solid white; color: white; }
+        .btn-secondary:hover { background-color: rgba(255,255,255,0.15); transform: translateY(-3px); }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── SECTION HEADER ── */
+        .section-header { text-align: center; margin-bottom: 55px; }
+        .section-header h2 { font-size: 2.4rem; color: var(--primary-color); margin-bottom: 14px; }
+        .section-header p { color: #555; max-width: 700px; margin: 0 auto; font-size: 1.05rem; }
+
+        /* ── FEATURES ── */
+        .features { padding: 80px 0; background-color: #f9f9f9; }
+        .features-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px; max-width: 1200px; margin: 0 auto; padding: 0 20px;
+        }
+        .feature-card {
+            background: white; border-radius: var(--border-radius); box-shadow: var(--shadow);
+            padding: 30px; transition: all 0.3s; text-align: center;
+        }
+        .feature-card:hover { transform: translateY(-10px); box-shadow: 0 12px 24px rgba(0,0,0,0.12); }
+        .feature-icon {
+            width: 80px; height: 80px; background: var(--secondary-color); color: var(--primary-color);
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 50%; margin: 0 auto 20px; font-size: 2rem;
+        }
+        .feature-card h3 { font-size: 1.4rem; color: var(--primary-color); margin-bottom: 12px; }
+        .feature-card p { color: #666; font-size: 0.97rem; }
+
+        /* ── HOW IT WORKS ── */
+        .how-it-works { padding: 80px 0; background-color: #e8f5e9; }
+        .steps-container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 50px; padding: 30px 20px; }
+        .step { display: flex; align-items: center; gap: 50px; }
+        .step:nth-child(even) { flex-direction: row-reverse; }
+        .step-image { flex: 1; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow); }
+        .step-image img { width: 100%; height: auto; display: block; }
+        .step-content { flex: 1; }
+        .step-number {
+            display: flex; justify-content: center; align-items: center;
+            width: 52px; height: 52px; background: var(--primary-color); color: white;
+            border-radius: 50%; font-size: 1.5rem; font-weight: bold; margin-bottom: 15px;
+        }
+        .step-content h3 { font-size: 1.9rem; color: var(--primary-color); margin-bottom: 12px; }
+        .step-content p { font-size: 1.05rem; color: #555; }
+
+        /* ── EXPERT TEAM ── */
+        .expert-team {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f1f8e9, #e8f5e9);
+        }
+        .experts-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px; max-width: 1200px; margin: 0 auto; padding: 0 20px;
+        }
+        .expert-card {
+            background: white; border-radius: 20px;
+            box-shadow: 0 6px 24px rgba(46,125,50,0.10);
+            padding: 32px 28px; text-align: center;
+            transition: all 0.3s; position: relative; overflow: hidden;
+        }
+        .expert-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+            background: linear-gradient(90deg, #2e7d32, #66bb6a);
+        }
+        .expert-card:hover { transform: translateY(-10px); box-shadow: 0 16px 40px rgba(46,125,50,0.18); }
+        .expert-avatar {
+            width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 18px;
+            background: linear-gradient(135deg, #a5d6a7, #2e7d32);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.8rem; color: white;
+            border: 4px solid var(--secondary-color);
+            box-shadow: 0 4px 14px rgba(46,125,50,0.25);
+        }
+        .expert-card h3 { font-size: 1.25rem; color: var(--primary-color); margin-bottom: 5px; font-weight: 800; }
+        .expert-role {
+            display: inline-block; background: #e8f5e9; color: #2e7d32;
+            padding: 4px 14px; border-radius: 20px; font-size: 0.82rem;
+            font-weight: 700; margin-bottom: 14px;
+        }
+        .expert-location { color: #888; font-size: 0.88rem; margin-bottom: 14px; }
+        .expert-location i { color: var(--primary-color); margin-right: 5px; }
+        .expert-bio { color: #555; font-size: 0.93rem; line-height: 1.6; margin-bottom: 18px; }
+        .expert-stats {
+            display: flex; justify-content: center; gap: 24px;
+            border-top: 1px solid #e8f5e9; padding-top: 16px;
+        }
+        .expert-stat { text-align: center; }
+        .expert-stat .stat-num { font-size: 1.3rem; font-weight: 800; color: var(--primary-color); }
+        .expert-stat .stat-label { font-size: 0.75rem; color: #888; }
+        .expert-tag {
+            display: inline-block; background: #f1f8e9; color: #388e3c;
+            border: 1px solid #c8e6c9; padding: 3px 10px;
+            border-radius: 12px; font-size: 0.75rem; margin: 3px 2px;
+        }
+        .talk-to-expert-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--primary-color); color: white;
+            padding: 10px 22px; border-radius: 25px; font-weight: 600;
+            font-size: 0.9rem; text-decoration: none; transition: all 0.3s;
+            margin-top: 16px;
+        }
+        .talk-to-expert-btn:hover { background: #1b5e20; color: white; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(46,125,50,0.3); }
+
+        /* ── TESTIMONIALS ── */
+        .testimonials {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            position: relative;
+        }
+        .testimonials-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .testimonial-slider {
+            display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+            scroll-behavior: smooth; -webkit-overflow-scrolling: touch;
+            gap: 28px; padding: 20px 4px; scrollbar-width: none;
+        }
+        .testimonial-slider::-webkit-scrollbar { display: none; }
+        .testimonial-card {
+            flex: 0 0 auto; width: 340px; background: white;
+            border-radius: var(--border-radius); box-shadow: var(--shadow);
+            padding: 28px; scroll-snap-align: center; position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .testimonial-card:hover { transform: translateY(-8px); box-shadow: 0 12px 28px rgba(0,0,0,0.15); }
+        .testimonial-card::before {
+            content: '\f10d'; font-family: 'Font Awesome 5 Free'; font-weight: 900;
+            font-size: 2rem; color: var(--secondary-color);
+            position: absolute; top: 18px; left: 18px; opacity: 0.3;
+        }
+        .testimonial-content { font-style: italic; color: #555; margin-bottom: 18px; line-height: 1.6; font-size: 1rem; padding-top: 22px; }
+        .testimonial-author { display: flex; align-items: center; gap: 14px; }
+        .author-avatar {
+            width: 56px; height: 56px; border-radius: 50%;
+            background: linear-gradient(135deg, #a5d6a7, #2e7d32);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; color: white; font-weight: 700;
+            border: 3px solid var(--accent-color); flex-shrink: 0;
+        }
+        .author-info h4 { margin: 0; color: var(--primary-color); font-size: 1rem; }
+        .author-info p { margin: 4px 0 0; color: #777; font-size: 0.85rem; }
+        .testimonial-rating { color: var(--accent-color); font-size: 1.1rem; margin-top: 10px; }
+        .slider-controls { display: flex; justify-content: center; gap: 14px; margin-top: 28px; }
+        .slider-control {
+            width: 42px; height: 42px; background: white; color: var(--primary-color);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.12); transition: all 0.3s;
+        }
+        .slider-control:hover { background: var(--primary-color); color: white; transform: scale(1.12); }
+
+        /* ── CTA ── */
+        .cta {
+            padding: 80px 0;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1600') center/cover no-repeat;
+            text-align: center; color: white;
+        }
+        .cta-container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+        .cta h2 { font-size: 2.5rem; margin-bottom: 18px; }
+        .cta p { font-size: 1.15rem; margin-bottom: 30px; opacity: 0.9; }
+
+        /* ── NEWSLETTER ── */
+        .newsletter { padding: 60px 0; background: #f5f5f5; }
+        .newsletter-container { max-width: 750px; margin: 0 auto; text-align: center; padding: 0 20px; }
+        .newsletter h2 { color: var(--primary-color); font-size: 2.1rem; margin-bottom: 12px; }
+        .newsletter p { color: #555; font-size: 1.05rem; margin-bottom: 28px; }
+        .newsletter-form { display: flex; max-width: 480px; margin: 0 auto; }
+        .newsletter-input {
+            flex: 1; padding: 14px 18px; border: 1px solid #ddd;
+            border-right: none; border-radius: 8px 0 0 8px;
+            font-size: 1rem; outline: none;
+        }
+        .newsletter-input:focus { border-color: var(--primary-color); }
+        .newsletter-btn {
+            background: var(--primary-color); color: white; border: none;
+            padding: 14px 22px; border-radius: 0 8px 8px 0;
+            font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.3s;
+        }
+        .newsletter-btn:hover { background: #1b5e20; }
+
+        /* ── FOOTER ── */
+        .footer { background: linear-gradient(to right, var(--primary-color), #1b5e20); color: white; padding: 50px 0 20px; }
+        .footer-container {
+            max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 40px; padding: 0 20px;
+        }
+        .footer-section h3 { font-size: 1.4rem; margin-bottom: 18px; position: relative; display: inline-block; }
+        .footer-section h3::after {
+            content: ''; position: absolute; left: 0; bottom: -5px;
+            width: 38px; height: 3px; background: var(--accent-color);
+        }
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 11px; }
+        .footer-links a { color: rgba(255,255,255,0.8); text-decoration: none; transition: all 0.3s; display: flex; align-items: center; gap: 9px; }
+        .footer-links a:hover { color: var(--accent-color); transform: translateX(5px); }
+        .footer-contact p { display: flex; align-items: center; gap: 10px; margin-bottom: 13px; color: rgba(255,255,255,0.8); }
+        .footer-contact i { color: var(--accent-color); font-size: 1.1rem; width: 20px; }
+        .social-icons { display: flex; gap: 13px; margin-top: 18px; }
+        .social-icon {
+            display: flex; justify-content: center; align-items: center;
+            width: 40px; height: 40px; background: rgba(255,255,255,0.1);
+            border-radius: 50%; color: white; font-size: 1.15rem; transition: all 0.3s;
+            text-decoration: none;
+        }
+        .social-icon:hover { background: var(--accent-color); color: var(--primary-color); transform: translateY(-5px); }
+        .footer-bottom {
+            text-align: center; padding-top: 36px; margin-top: 36px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7); font-size: 0.88rem;
+        }
+        .footer-bottom a { color: rgba(255,255,255,0.8); text-decoration: none; }
+        .footer-bottom a:hover { color: var(--accent-color); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 992px) {
+            .step { flex-direction: column; text-align: center; gap: 28px; }
+            .step:nth-child(even) { flex-direction: column; }
+            .step-number { margin: 0 auto 14px; }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.3rem; }
+            .hero p { font-size: 1.05rem; }
+            .mobile-menu-btn { display: block; }
+            nav ul {
+                display: none; position: absolute; top: 65px; left: 0; right: 0;
+                flex-direction: column; background: var(--primary-color);
+                padding: 18px; box-shadow: var(--shadow);
+            }
+            nav ul.show { display: flex; }
+            nav ul li { margin: 9px 0; }
+            .newsletter-form { flex-direction: column; }
+            .newsletter-input { border-radius: 8px; border-right: 1px solid #ddd; margin-bottom: 10px; }
+            .newsletter-btn { border-radius: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header>
+    <div class="container nav-container">
+        <a href="/dashboard" class="logo">
+            <i class="fas fa-leaf"></i>
+            <span class="logo-text">AgriPal</span>
+        </a>
+        <button class="mobile-menu-btn" id="menuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav>
+            <ul id="menu">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#our-experts">Our Experts</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="/talk-to-expert">Talk to Expert</a></li>
+                <li><a href="/detection-tool" class="btn btn-primary" style="padding:8px 20px;margin:0;">Get Started</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Smart Plant Disease Detection</h1>
+        <p>Use AI technology to identify and treat plant diseases instantly. Protect your crops and increase yield with our cutting-edge solution — backed by real agricultural experts.</p>
+        <div class="hero-buttons">
+            <a href="/detection-tool" class="btn btn-primary"><i class="fas fa-search" style="margin-right:8px;"></i>Detect Disease Now</a>
+            <a href="#how-it-works" class="btn btn-secondary"><i class="fas fa-play-circle" style="margin-right:8px;"></i>Learn More</a>
+        </div>
+    </div>
+</section>
+
+<!-- ══ FEATURES ══ -->
+<section class="features" id="features">
+    <div class="section-header">
+        <h2>Why Choose AgriPal</h2>
+        <p>Our platform offers advanced AI-powered solutions to help farmers identify and treat plant diseases efficiently and affordably.</p>
+    </div>
+    <div class="features-container">
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-camera"></i></div>
+            <h3>Instant Detection</h3>
+            <p>Take a photo of your plant and get disease identification in seconds using our advanced AI model trained on 38+ plant diseases.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-prescription-bottle-alt"></i></div>
+            <h3>Treatment Plans</h3>
+            <p>Get precise pesticide dosage based on your exact land area, with both chemical and organic treatment options.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+            <h3>Weekly Tracking</h3>
+            <p>Monitor your plant's recovery week by week. Our AI adjusts dosage recommendations based on treatment progress.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-user-tie"></i></div>
+            <h3>Expert Support</h3>
+            <p>Can't detect the disease? Submit your photo and get a personal reply from our certified agricultural expert team.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-seedling"></i></div>
+            <h3>Nutrition Analysis</h3>
+            <p>Detect nutrient deficiencies in your plants and get fertilizer recommendations tailored to your soil and crop type.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-store"></i></div>
+            <h3>Find Agro Shops</h3>
+            <p>Locate nearby agro shops, markets, and cold storage facilities to get the right products and sell your produce easily.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section class="how-it-works" id="how-it-works">
+    <div class="section-header">
+        <h2>How AgriPal Works</h2>
+        <p>Our simple 3-step process helps you identify and treat plant diseases in minutes.</p>
+    </div>
+    <div class="steps-container">
+        <div class="step">
+            <div class="step-image">
+                <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600" alt="Take a photo of your plant">
+            </div>
+            <div class="step-content">
+                <div class="step-number">1</div>
+                <h3>Upload a Photo</h3>
+                <p>Take a clear photo of the affected plant part and upload it using our detection tool. You can also use your phone camera directly.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-image">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600" alt="AI analyzes the image">
+            </div>
+            <div class="step-content">
+                <div class="step-number">2</div>
+                <h3>AI Analyses Instantly</h3>
+                <p>Our AI segments each leaf individually, detects diseases with GradCAM heatmaps, and calculates exact severity — all in under 30 seconds.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-image">
+                <img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?w=600" alt="Apply treatment">
+            </div>
+            <div class="step-content">
+                <div class="step-number">3</div>
+                <h3>Apply Treatment</h3>
+                <p>Follow the customised treatment plan with precise dosage for your land area. Upload again next week to track your plant's recovery progress.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ EXPERT TEAM ══ -->
+<section class="expert-team" id="our-experts">
+    <div class="section-header">
+        <h2>Meet Our Agricultural Experts</h2>
+        <p>Our certified experts are available to review your plant problems and give personalised guidance when AI alone isn't enough.</p>
+    </div>
+    <div class="experts-container">
+
+        <!-- Expert 1 -->
+        <div class="expert-card">
+            <div class="expert-avatar">🌾</div>
+            <h3>Dr. Arjun Verma</h3>
+            <span class="expert-role">Plant Pathologist</span>
+            <div class="expert-location"><i class="fas fa-map-marker-alt"></i> Bangalore, Karnataka</div>
+            <p class="expert-bio">15+ years of experience diagnosing and treating fungal, bacterial, and viral plant diseases across South India. Specialises in tomato and paddy crops.</p>
+            <div style="margin-bottom:10px;">
+                <span class="expert-tag">Tomato</span>
+                <span class="expert-tag">Paddy</span>
+                <span class="expert-tag">Fungal Disease</span>
+                <span class="expert-tag">Blight</span>
+            </div>
+            <div class="expert-stats">
+                <div class="expert-stat"><div class="stat-num">1,200+</div><div class="stat-label">Cases Solved</div></div>
+                <div class="expert-stat"><div class="stat-num">15 yrs</div><div class="stat-label">Experience</div></div>
+                <div class="expert-stat"><div class="stat-num">4.9 ⭐</div><div class="stat-label">Rating</div></div>
+            </div>
+            <a href="/talk-to-expert" class="talk-to-expert-btn"><i class="fas fa-comments"></i> Talk to Expert</a>
+        </div>
+
+        <!-- Expert 2 -->
+        <div class="expert-card">
+            <div class="expert-avatar">🌿</div>
+            <h3>Ms. Priya Nair</h3>
+            <span class="expert-role">Crop Science Specialist</span>
+            <div class="expert-location"><i class="fas fa-map-marker-alt"></i> Pune, Maharashtra</div>
+            <p class="expert-bio">Expert in integrated pest management and organic farming solutions. Helps farmers reduce chemical usage while maintaining healthy crop yields sustainably.</p>
+            <div style="margin-bottom:10px;">
+                <span class="expert-tag">Organic Farming</span>
+                <span class="expert-tag">IPM</span>
+                <span class="expert-tag">Grape</span>
+                <span class="expert-tag">Sugarcane</span>
+            </div>
+            <div class="expert-stats">
+                <div class="expert-stat"><div class="stat-num">900+</div><div class="stat-label">Cases Solved</div></div>
+                <div class="expert-stat"><div class="stat-num">11 yrs</div><div class="stat-label">Experience</div></div>
+                <div class="expert-stat"><div class="stat-num">4.8 ⭐</div><div class="stat-label">Rating</div></div>
+            </div>
+            <a href="/talk-to-expert" class="talk-to-expert-btn"><i class="fas fa-comments"></i> Talk to Expert</a>
+        </div>
+
+        <!-- Expert 3 -->
+        <div class="expert-card">
+            <div class="expert-avatar">🌱</div>
+            <h3>Mr. Ravi Shankar</h3>
+            <span class="expert-role">Agricultural Advisor</span>
+            <div class="expert-location"><i class="fas fa-map-marker-alt"></i> Hyderabad, Telangana</div>
+            <p class="expert-bio">Specialist in soil health, nutrition deficiency diagnosis, and fertiliser management. Works with smallholder farmers to improve yield using precision agriculture.</p>
+            <div style="margin-bottom:10px;">
+                <span class="expert-tag">Soil Health</span>
+                <span class="expert-tag">Nutrition</span>
+                <span class="expert-tag">Corn</span>
+                <span class="expert-tag">Vegetable Crops</span>
+            </div>
+            <div class="expert-stats">
+                <div class="expert-stat"><div class="stat-num">750+</div><div class="stat-label">Cases Solved</div></div>
+                <div class="expert-stat"><div class="stat-num">9 yrs</div><div class="stat-label">Experience</div></div>
+                <div class="expert-stat"><div class="stat-num">4.9 ⭐</div><div class="stat-label">Rating</div></div>
+            </div>
+            <a href="/talk-to-expert" class="talk-to-expert-btn"><i class="fas fa-comments"></i> Talk to Expert</a>
+        </div>
+
+    </div>
+    <div style="text-align:center;margin-top:40px;">
+        <a href="/talk-to-expert" class="btn btn-primary" style="font-size:1.05rem;padding:14px 36px;">
+            <i class="fas fa-paper-plane" style="margin-right:8px;"></i>Submit Your Plant Problem
+        </a>
+        <a href="/check-requests" class="btn btn-secondary" style="font-size:1.05rem;padding:14px 36px;background:transparent;border:2px solid var(--primary-color);color:var(--primary-color);">
+            <i class="fas fa-search" style="margin-right:8px;"></i>Check My Request Status
+        </a>
+    </div>
+</section>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section class="testimonials" id="testimonials">
+    <div class="section-header">
+        <h2>What Farmers Say</h2>
+        <p>Real feedback from farmers across India who use AgriPal to protect their crops every season.</p>
+    </div>
+    <div class="testimonials-container">
+        <div class="testimonial-slider" id="testimonial-slider">
+
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    AgriPal detected tomato late blight in my field within seconds. The dosage calculator told me exactly how much to spray for my 2-acre farm. My crop was saved!
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">RK</div>
+                    <div class="author-info">
+                        <h4>Ramesh Kumar</h4>
+                        <p>Tomato Farmer, Mysuru</p>
+                    </div>
+                </div>
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    I submitted my pepper crop photo to the expert team when AI wasn't sure. Got a detailed reply from Dr. Arjun within hours. Very helpful and professional service!
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SP</div>
+                    <div class="author-info">
+                        <h4>Sunita Patil</h4>
+                        <p>Vegetable Farmer, Pune</p>
+                    </div>
+                </div>
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    The weekly tracking feature is amazing. I upload photos every week and AgriPal tells me if my treatment is working or if I need to change. My potato yield improved by 40% this season.
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">MR</div>
+                    <div class="author-info">
+                        <h4>Mahesh Reddy</h4>
+                        <p>Potato Farmer, Hyderabad</p>
+                    </div>
+                </div>
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    The nutrition testing tool found nitrogen deficiency in my corn field which I had missed for weeks. The fertiliser recommendation was spot on. Simple to use even for me!
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">AS</div>
+                    <div class="author-info">
+                        <h4>Anita Sharma</h4>
+                        <p>Corn Farmer, Nagpur</p>
+                    </div>
+                </div>
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+            </div>
+
+        </div>
+        <div class="slider-controls">
+            <div class="slider-control prev"><i class="fas fa-arrow-left"></i></div>
+            <div class="slider-control next"><i class="fas fa-arrow-right"></i></div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section class="cta">
+    <div class="cta-container">
+        <h2>Ready to Protect Your Crops?</h2>
+        <p>Join thousands of farmers across India who use AgriPal to detect diseases early and save their harvest every season.</p>
+        <a href="/detection-tool" class="btn btn-primary"><i class="fas fa-search" style="margin-right:8px;"></i>Start Detecting Now</a>
+        <a href="/detection-tool" class="btn btn-secondary"><i class="fas fa-globe" style="margin-right:8px;"></i>Try Web Version</a>
+    </div>
+</section>
+
+<!-- ══ NEWSLETTER ══ -->
+<section class="newsletter">
+    <div class="newsletter-container">
+        <h2>Stay Updated</h2>
+        <p>Subscribe to receive the latest tips on plant disease management, seasonal farming advice, and AgriPal updates.</p>
+        <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+            <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+            <button type="submit" class="newsletter-btn">Subscribe</button>
+        </form>
+    </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer" id="contact">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>AgriPal</h3>
+            <p style="color:rgba(255,255,255,0.8);font-size:0.95rem;line-height:1.7;">Advanced plant disease detection using AI technology to help farmers protect their crops and increase yield across India.</p>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul class="footer-links">
+                <li><a href="/dashboard"><i class="fas fa-chevron-right"></i> Dashboard</a></li>
+                <li><a href="/detection-tool"><i class="fas fa-chevron-right"></i> Disease Detection</a></li>
+                <li><a href="/nutrition-testing"><i class="fas fa-chevron-right"></i> Nutrition Testing</a></li>
+                <li><a href="/post-harvest"><i class="fas fa-chevron-right"></i> Post Harvest</a></li>
+                <li><a href="/talk-to-expert"><i class="fas fa-chevron-right"></i> Talk to Expert</a></li>
+                <li><a href="/chatbot"><i class="fas fa-chevron-right"></i> AI Assistant</a></li>
+                <li><a href="/about-us"><i class="fas fa-chevron-right"></i> About Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Expert Support</h3>
+            <ul class="footer-links">
+                <li><a href="/talk-to-expert"><i class="fas fa-chevron-right"></i> Submit Plant Problem</a></li>
+                <li><a href="/check-requests"><i class="fas fa-chevron-right"></i> Check Request Status</a></li>
+                <li><a href="/farmer-dashboard"><i class="fas fa-chevron-right"></i> Farmer Dashboard</a></li>
+                <li><a href="/schemes"><i class="fas fa-chevron-right"></i> Government Schemes</a></li>
+                <li><a href="/contact"><i class="fas fa-chevron-right"></i> Contact Support</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Contact Us</h3>
+            <div class="footer-contact">
+                <p><i class="fas fa-map-marker-alt"></i> Mysuru, Karnataka, India</p>
+                <p><i class="fas fa-envelope"></i> support@agripal.in</p>
+                <p><i class="fas fa-clock"></i> Mon – Sat: 9:00 AM – 6:00 PM</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 AgriPal. All Rights Reserved. |
+            <a href="#">Privacy Policy</a> |
+            <a href="#">Terms of Service</a>
+        </p>
+    </div>
+</footer>
+
+<script>
+    // Mobile menu toggle
+    document.getElementById('menuBtn').addEventListener('click', function() {
+        document.getElementById('menu').classList.toggle('show');
+    });
+
+    // Testimonial slider
+    const slider = document.getElementById('testimonial-slider');
+    document.querySelector('.slider-control.prev').addEventListener('click', () => {
+        slider.scrollBy({ left: -370, behavior: 'smooth' });
+    });
+    document.querySelector('.slider-control.next').addEventListener('click', () => {
+        slider.scrollBy({ left: 370, behavior: 'smooth' });
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href !== '#') {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
+                    document.getElementById('menu').classList.remove('show');
+                }
+            }
+        });
+    });
+
+    // Newsletter
+    function handleNewsletter(e) {
+        e.preventDefault();
+        const email = e.target.querySelector('input').value;
+        alert('Thank you for subscribing! We will keep you updated at ' + email);
+        e.target.reset();
+    }
+</script>
+</body>
+</html>

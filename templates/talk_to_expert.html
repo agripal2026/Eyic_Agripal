@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talk to Expert - AgriPal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --primary-color: #2e7d32; --accent-color: #ffd54f; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; position: relative; }
+        .background-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); z-index: 0; }
+        .background-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(46,125,50,0.1) 35px, rgba(46,125,50,0.1) 70px); z-index: 0; }
+        .content-wrapper { position: relative; z-index: 1; }
+        .navbar { background: linear-gradient(135deg, #1b5e20, #2e7d32); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 100; }
+        .navbar-brand { font-size: 24px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        .navbar-brand i { font-size: 28px; color: var(--accent-color); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+        .navbar-center { display: flex; gap: 25px; }
+        .navbar-center a { color: white; text-decoration: none; font-weight: 600; padding: 8px 15px; border-radius: 25px; transition: all 0.3s ease; }
+        .navbar-center a:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+        .navbar-user { display: flex; align-items: center; gap: 20px; }
+        .user-info { text-align: right; }
+        .btn-logout { background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 25px; text-decoration: none; color: white; transition: all 0.3s; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-logout:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .section { background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9)); padding: 30px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border: 2px solid rgba(46,125,50,0.2); animation: fadeInUp 0.6s ease-out; animation-fill-mode: both; }
+        .section:nth-child(1){animation-delay:0s}
+        .section:nth-child(2){animation-delay:0.1s}
+        .section:nth-child(3){animation-delay:0.2s}
+        .section:nth-child(4){animation-delay:0.3s}
+        .section-title { font-size: 22px; margin-bottom: 20px; color: var(--primary-color); border-bottom: 3px solid var(--primary-color); padding-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .page-intro { text-align: center; }
+        .page-intro .big-icon { font-size: 4rem; margin-bottom: 15px; }
+        .page-intro h1 { color: var(--primary-color); font-size: 2.2rem; margin-bottom: 10px; }
+        .page-intro p { color: #666; font-size: 1.05rem; }
+        .contact-buttons { display: flex; gap: 15px; flex-wrap: wrap; }
+        .contact-btn { display: inline-flex; align-items: center; gap: 10px; padding: 18px 30px; border-radius: 15px; font-size: 16px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+        .contact-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .contact-btn i { font-size: 1.3rem; }
+        .btn-call { background: linear-gradient(135deg, #1b5e20, #2e7d32); color: white; }
+        .btn-whatsapp { background: linear-gradient(135deg, #128C7E, #25D366); color: white; }
+        .form-group { margin-bottom: 22px; }
+        .form-group label { display: block; font-weight: 600; color: #444; margin-bottom: 8px; font-size: 15px; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 13px 16px; border-radius: 12px;
+            border: 2px solid #e0e0e0; font-size: 15px;
+            font-family: inherit; transition: border-color 0.3s, box-shadow 0.3s; background: white;
+        }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(46,125,50,0.1); }
+        .form-group textarea { height: 100px; resize: vertical; }
+        .form-hint { font-size: 12px; color: #999; margin-top: 5px; }
+        .upload-box { border: 2px dashed #a5d6a7; border-radius: 12px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s; background: rgba(232,245,233,0.5); }
+        .upload-box:hover { border-color: var(--primary-color); background: #e8f5e9; transform: scale(1.01); }
+        .upload-box .upload-icon { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 10px; }
+        .upload-box .upload-label { font-weight: 600; color: var(--primary-color); font-size: 15px; cursor: pointer; }
+        .upload-box .upload-hint { color: #999; font-size: 13px; margin-top: 5px; }
+        .upload-box input[type="file"] { display: none; }
+        .file-chosen { margin-top: 8px; color: var(--primary-color); font-size: 13px; font-weight: 600; }
+        .submit-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, #1b5e20, #2e7d32); color: white; border: none; border-radius: 15px; font-size: 17px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(46,125,50,0.3); display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(46,125,50,0.4); }
+        .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .action-btn { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 18px; background: linear-gradient(135deg, #1b5e20, #2e7d32); color: white; text-align: center; border-radius: 15px; text-decoration: none; transition: all 0.3s; font-weight: 600; font-size: 15px; box-shadow: 0 4px 15px rgba(46,125,50,0.3); }
+        .action-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(46,125,50,0.4); }
+        @media(max-width:768px){
+            .navbar { flex-direction: column; gap: 15px; padding: 15px 20px; }
+            .navbar-center { display: none; }
+            .navbar-user { width: 100%; justify-content: space-between; }
+            .contact-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+<div class="background-layer"></div>
+<div class="background-pattern"></div>
+<div class="content-wrapper">
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fas fa-leaf"></i> AgriPal
+        </div>
+        <div class="navbar-center">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('detection_tool') }}">Detection</a>
+            <a href="{{ url_for('post_harvest_page') }}">Post-Harvest</a>
+            <a href="{{ url_for('library') }}">Library</a>
+            <a href="{{ url_for('about_us') }}">About</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+        </div>
+        <div class="navbar-user">
+            {% if current_user.is_authenticated %}
+            <div class="user-info">
+                <div><strong>{{ current_user.full_name or current_user.username }}</strong></div>
+                <div style="font-size:12px;opacity:0.9">{{ current_user.email }}</div>
+            </div>
+            <a href="{{ url_for('auth.logout') }}" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+            {% else %}
+            <a href="{{ url_for('auth.login') }}" class="btn-logout">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="section page-intro">
+            <div class="big-icon">👨‍🌾</div>
+            <h1>Talk to an Agricultural Expert</h1>
+            <p>If AgriPal cannot confidently detect the disease, our expert team will personally review your case and guide you step by step.</p>
+        </div>
+
+        <!-- QUICK CONTACT -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-phone-alt"></i> Quick Contact</h2>
+            <div class="contact-buttons">
+                <a href="tel:+919876543210" class="contact-btn btn-call">
+                    <i class="fas fa-phone"></i> 📞 Call Expert Now
+                </a>
+                <a href="https://wa.me/919876543210?text=Hello I need help with my crop" target="_blank" class="contact-btn btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> 💬 WhatsApp Expert
+                </a>
+            </div>
+        </div>
+
+        <!-- SUBMIT FORM -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-paper-plane"></i> Submit a Request</h2>
+            <p style="color:#666;margin-bottom:25px;">Fill in the details below. Upload a photo of the affected plant — an expert will review it and reply directly to you.</p>
+
+            <form action="/submit-expert" method="POST" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label><i class="fas fa-mobile-alt"></i> Phone Number *</label>
+                    <input type="tel" name="phone" placeholder="📱 Your phone number" required>
+                    <div class="form-hint">We'll use this to match your expert reply</div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-seedling"></i> Crop Type</label>
+                    <input type="text" name="crop" placeholder="🌱 e.g. Tomato, Rice, Wheat (optional)">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-align-left"></i> Describe the Problem</label>
+                    <textarea name="description" placeholder="Describe symptoms — when did you notice them, how many plants are affected, etc. (optional)"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-camera"></i> Plant Photo *</label>
+                    <div class="upload-box" onclick="document.getElementById('imgInput').click()">
+                        <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="upload-label">📸 Tap to take photo or upload from gallery</div>
+                        <div class="upload-hint">Close-up of the affected leaf or plant part gives best results</div>
+                        <input type="file" id="imgInput" name="image" accept="image/*" capture="environment" required onchange="showFile(this,'imgName')">
+                    </div>
+                    <div class="file-chosen" id="imgName"></div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-microphone"></i> Voice Message <span style="color:#999;font-weight:400;">(Optional)</span></label>
+                    <div class="upload-box" onclick="document.getElementById('audioInput').click()">
+                        <div class="upload-icon"><i class="fas fa-microphone-alt"></i></div>
+                        <div class="upload-label">🎤 Tap to record or upload a voice note</div>
+                        <div class="upload-hint">Describe the problem in your own language</div>
+                        <input type="file" id="audioInput" name="audio" accept="audio/*" capture onchange="showFile(this,'audioName')">
+                    </div>
+                    <div class="file-chosen" id="audioName"></div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Send Request to Expert
+                </button>
+            </form>
+        </div>
+
+        <!-- NAVIGATION -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-bolt"></i> Quick Actions</h2>
+            <div class="quick-actions">
+                <a href="/check-requests" class="action-btn">
+                    <i class="fas fa-inbox"></i> Check My Requests
+                </a>
+                <a href="{{ url_for('detection_tool') }}" class="action-btn">
+                    <i class="fas fa-camera"></i> Try Detection Again
+                </a>
+                <a href="{{ url_for('chatbot_page') }}" class="action-btn">
+                    <i class="fas fa-comments"></i> Ask AI Chatbot
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="action-btn">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function showFile(input, labelId) {
+    const el = document.getElementById(labelId);
+    if (input.files && input.files[0]) {
+        el.innerHTML = '<i class="fas fa-check-circle"></i> ' + input.files[0].name;
+    }
+}
+</script>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({ pageLanguage:'en', layout:google.translate.TranslateElement.InlineLayout.SIMPLE, includedLanguages:'en,hi,te,ta,kn,ml,gu,pa,bn,mr,or,as' }, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
