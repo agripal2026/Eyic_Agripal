@@ -1961,21 +1961,29 @@ def upload_file():
 from flask_login import login_required, current_user
 
 
+# ============================================================================
+# /predict — CLOUD MODE WITH FULL WEEKLY ASSESSMENT CONTINUITY
+# ============================================================================
+
 @app.route('/predict', methods=['POST'])
 @login_required
 def analyze():
     """
     Cloud-mode predict endpoint.
+
     TensorFlow / .h5 model has been removed to stay within Render free-tier
-    memory limits (512 MB).  The route still:
-      - saves the uploaded image
-      - records a DiseaseDetection row so the Dashboard history works
-      - renders result1.html with a maintenance placeholder
-    All segmentation / GradCAM / weekly-assessment logic that depends on the
-    model has been bypassed gracefully.
+    memory limits (512 MB).  This route:
+      - Saves the uploaded image
+      - Calls analyze_weekly_progress() so the week counter advances each upload
+      - Calls save_weekly_assessment()  so dashboard graphs stay populated
+      - Records a DiseaseDetection row so the history log keeps updating
+      - Renders result1.html with a maintenance placeholder
+
+    Dashboard continuity is preserved: every upload creates a new weekly
+    data-point even while the AI model is offline.
     """
 
-    # Clear any previous detection file at the start
+    # ── Clear any previous detection file at the start ───────────────────────
     try:
         if os.path.exists('detected_disease.json'):
             os.remove('detected_disease.json')
@@ -1983,7 +1991,7 @@ def analyze():
         logger.error(f"Error removing old detection file: {e}")
 
     logger.info("=" * 80)
-    logger.info("🚀 PREDICT ENDPOINT — CLOUD / MAINTENANCE MODE")
+    logger.info("🚀 PREDICT ENDPOINT — CLOUD / MAINTENANCE MODE (with assessment tracking)")
     logger.info("=" * 80)
 
     # ── Validate uploaded file ────────────────────────────────────────────────
@@ -2003,9 +2011,9 @@ def analyze():
 
     try:
         # ── Get form data ─────────────────────────────────────────────────────
-        location = request.form.get("location", "").strip()
-        area = request.form.get("area", "0")
-        area_unit = request.form.get("area_unit", "square_meter")
+        location   = request.form.get("location", "").strip()
+        area       = request.form.get("area", "0")
+        area_unit  = request.form.get("area_unit", "square_meter")
         area_float = float(area) if area else 0.0
 
         # ── Save user profile data (location / land size) ─────────────────────
@@ -2015,8 +2023,8 @@ def analyze():
                 current_user.location = location
                 user_data_updated = True
             if area_float > 0:
-                current_user.land_area = area_float
-                current_user.area_unit = area_unit
+                current_user.land_area  = area_float
+                current_user.area_unit  = area_unit
                 user_data_updated = True
             if user_data_updated:
                 db.session.commit()
@@ -2027,148 +2035,234 @@ def analyze():
 
         # ── Save uploaded image ───────────────────────────────────────────────
         image_filename = str(uuid.uuid4()) + os.path.splitext(image_file.filename)[1]
-        image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_filename)
+        image_path     = os.path.join(app.config['UPLOAD_FOLDER'], image_filename)
         image_file.save(image_path)
         logger.info(f"✅ Image saved to: {image_path}")
 
-        # ── Cloud-mode placeholder disease info ───────────────────────────────
+        # ── Cloud-mode placeholder values ─────────────────────────────────────
+        predicted_class    = "Cloud Mode — Review Required"
+        overall_severity   = "Maintenance"
+        dominant_plant_type = "Detected Plant"
+
+        # ── Determine detection mode from session ─────────────────────────────
+        # Honour whatever mode the user set via /api/plant-session/set;
+        # fall back to 'continue' so existing tracking sessions keep advancing.
+        detection_mode = session.get('detection_mode', 'continue')
+        logger.info(f"📋 Detection mode from session: {detection_mode}")
+
+        # ── Build minimal current_detection dict for assessment logic ─────────
+        current_detection_data = {
+            'disease'            : predicted_class,
+            'severity'           : overall_severity,
+            'color_severity'     : 0,
+            'affected_percentage': 0,
+            'image_filename'     : image_filename,
+        }
+
+        # ── Run weekly assessment logic ───────────────────────────────────────
+        # This ensures the week counter increments and dashboard graphs keep
+        # moving even while the AI model is offline.
+        logger.info("📊 Running weekly assessment logic (cloud-mode)...")
+        try:
+            assessment_result = analyze_weekly_progress(
+                current_user.id,
+                dominant_plant_type,
+                current_detection_data,
+                detection_mode=detection_mode
+            )
+            logger.info(f"✅ Assessment complete: Week {assessment_result.get('week_number', 1)}")
+        except Exception as assessment_error:
+            logger.error(f"⚠️ Weekly assessment error (non-fatal): {assessment_error}")
+            # Provide a safe fallback so the rest of the route still works
+            assessment_result = {
+                'is_first_assessment' : True,
+                'week_number'         : 1,
+                'recommendation'      : (
+                    'AI model is currently paused on the cloud deployment. '
+                    'Please use the KisanAI Chatbot or Talk to Expert for guidance.'
+                ),
+                'dosage_recommendation': 'maintain',
+                'next_assessment_date' : (datetime.now() + timedelta(days=7)).strftime('%Y-%m-%d'),
+                'is_improving'         : False,
+                'is_worsening'         : False,
+                'is_stable'            : False,
+                'is_cured'             : False,
+            }
+
+        # ── Save weekly assessment to database ────────────────────────────────
+        # Keeps the dashboard graphs populated with a data-point for today.
+        logger.info("💾 Saving weekly assessment record...")
+        try:
+            save_detection_data = {
+                'disease'           : predicted_class,
+                'severity'          : overall_severity,
+                'color_severity'    : 0,
+                'affected_percentage': 0,
+                'image_filename'    : image_filename,
+                'pesticide_used'    : 'N/A — Cloud Mode',
+                'pesticide_type'    : 'none',
+                'dosage_applied'    : 0.0,
+                'application_method': 'N/A',
+                'farmer_notes'      : 'Recorded during cloud/maintenance deployment.',
+            }
+            save_weekly_assessment(
+                current_user.id,
+                dominant_plant_type,
+                save_detection_data,
+                assessment_result
+            )
+            logger.info("✅ Weekly assessment record saved")
+        except Exception as save_error:
+            logger.error(f"⚠️ Could not save weekly assessment (non-fatal): {save_error}")
+            # Do NOT re-raise — the detection record below is more important
+
+        # ── Save detection to DB for history log ──────────────────────────────
+        logger.info("💾 Saving detection record to database...")
+        try:
+            detection = DiseaseDetection(
+                user_id              = current_user.id,
+                detected_disease     = predicted_class,
+                confidence           = 0.0,
+                severity             = overall_severity,
+                plant_type           = dominant_plant_type,
+                image_filename       = image_filename,
+                gradcam_filename     = None,
+                farm_area            = area_float,
+                farm_area_unit       = area_unit,
+                farm_location        = location,
+                total_leaves_analyzed= 0,
+                unique_diseases_count= 0,
+                is_multi_disease     = False,
+                chemical_dosage      = None,
+                organic_dosage       = None
+            )
+            db.session.add(detection)
+            db.session.commit()
+            logger.info("✅ Detection record saved to database (cloud-mode)")
+        except Exception as db_error:
+            logger.error(f"❌ Could not save detection record: {db_error}")
+            db.session.rollback()
+
+        # ── Write detected_disease.json for chatbot context ───────────────────
+        try:
+            with open("detected_disease.json", "w") as f:
+                json.dump({
+                    "disease"    : predicted_class,
+                    "confidence" : 0.0,
+                    "severity"   : overall_severity,
+                    "plant_type" : dominant_plant_type,
+                    "timestamp"  : str(datetime.now()),
+                    "cloud_mode" : True
+                }, f, indent=2)
+        except Exception as json_error:
+            logger.warning(f"⚠️ Could not write detected_disease.json: {json_error}")
+
+        # ── Build disease_info placeholder for the result page ────────────────
         disease_info = {
-            "name": "Manual Review Required",
+            "name"       : "Manual Review Required",
             "description": (
                 "The AI prediction engine is currently in maintenance mode for "
-                "the cloud deployment. Your image has been logged successfully. "
+                "the cloud deployment. Your image has been logged successfully and "
+                "your weekly progress record has been updated. "
                 "Please use the KisanAI Chatbot for immediate crop advice or "
                 "visit the 'Talk to Expert' section to send this photo to our team."
             ),
-            "treatment": [
+            "treatment"  : [
                 "Use the KisanAI Chatbot below for immediate disease guidance.",
                 "Upload clear photos of affected leaves and describe symptoms.",
                 "Consult the 'Talk to Expert' section to reach our agronomists.",
                 "Check the Plant Library for common disease identification tips.",
             ],
-            "severity": "Maintenance",
-            "pesticide": {
+            "severity"   : overall_severity,
+            "pesticide"  : {
                 "chemical": {
-                    "name": "Consult Chatbot / Expert",
-                    "dosage_per_hectare": 0,
-                    "unit": "L",
-                    "usage": "Please use the KisanAI Chatbot for treatment recommendations.",
-                    "frequency": "N/A",
-                    "safety": "Always follow product label instructions."
+                    "name"               : "Consult Chatbot / Expert",
+                    "dosage_per_hectare" : 0,
+                    "unit"               : "L",
+                    "usage"              : "Please use the KisanAI Chatbot for treatment recommendations.",
+                    "frequency"          : "N/A",
+                    "safety"             : "Always follow product label instructions."
                 },
-                "organic": {
-                    "name": "Consult Chatbot / Expert",
-                    "dosage_per_hectare": 0,
-                    "unit": "L",
-                    "usage": "Please use the KisanAI Chatbot for organic treatment recommendations.",
-                    "frequency": "N/A",
-                    "safety": "Safe for environment — always follow label."
+                "organic" : {
+                    "name"               : "Consult Chatbot / Expert",
+                    "dosage_per_hectare" : 0,
+                    "unit"               : "L",
+                    "usage"              : "Please use the KisanAI Chatbot for organic treatment recommendations.",
+                    "frequency"          : "N/A",
+                    "safety"             : "Safe for environment — always follow label."
                 }
             }
         }
 
-        # ── Save to database so the Dashboard history still works ─────────────
-        detection = DiseaseDetection(
-            user_id=current_user.id,
-            detected_disease="Cloud Mode — Review Required",
-            confidence=0.0,
-            severity="N/A",
-            plant_type="Detected Plant",
-            image_filename=image_filename,
-            gradcam_filename=None,
-            farm_area=area_float,
-            farm_area_unit=area_unit,
-            farm_location=location,
-            total_leaves_analyzed=0,
-            unique_diseases_count=0,
-            is_multi_disease=False,
-            chemical_dosage=None,
-            organic_dosage=None
+        # ── Determine whether to show dosage-change banner on result page ─────
+        show_dosage_change = (
+            not assessment_result.get('is_first_assessment', True) and
+            assessment_result.get('dosage_recommendation') != 'maintain'
         )
 
-        db.session.add(detection)
-        db.session.commit()
-        logger.info("✅ Detection record saved to database (cloud-mode placeholder)")
-
-        # ── Write minimal detected_disease.json for chatbot context ──────────
-        with open("detected_disease.json", "w") as f:
-            json.dump({
-                "disease": "Cloud Mode — Review Required",
-                "confidence": 0.0,
-                "severity": "N/A",
-                "plant_type": "Detected Plant",
-                "timestamp": str(datetime.now()),
-                "cloud_mode": True
-            }, f, indent=2)
-
-        # ── Render result page ────────────────────────────────────────────────
         logger.info("📦 Rendering cloud-mode result page")
+        logger.info(f"   Week number  : {assessment_result.get('week_number', 1)}")
+        logger.info(f"   Show dosage  : {show_dosage_change}")
+        logger.info("=" * 80)
+
         return render_template(
             "result1.html",
-            # Images
-            image_url=url_for("static", filename=f"uploads/{image_filename}"),
-            gradcam_url=None,
-            heatmap_url=None,
-            segmented_image_url=None,
 
-            # Prediction data (placeholder)
-            predicted_class="Cloud Mode — Review Required",
-            confidence=0.0,
-            severity="Maintenance",
-            total_leaves=0,
-            all_predictions=[],
+            # ── Images ────────────────────────────────────────────────────────
+            image_url          = url_for("static", filename=f"uploads/{image_filename}"),
+            gradcam_url        = None,
+            heatmap_url        = None,
+            segmented_image_url= None,
 
-            # Plant & disease info
-            dominant_plant_type="Detected Plant",
-            unique_diseases=None,
-            combined_treatments=None,
-            is_multi_disease=False,
+            # ── Prediction data (placeholder) ─────────────────────────────────
+            predicted_class    = predicted_class,
+            confidence         = 0.0,
+            severity           = overall_severity,
+            total_leaves       = 0,
+            all_predictions    = [],
 
-            # Plant severity
-            plant_severity=0,
-            plant_severity_level="N/A",
+            # ── Plant & disease info ──────────────────────────────────────────
+            dominant_plant_type= dominant_plant_type,
+            unique_diseases    = None,
+            combined_treatments= None,
+            is_multi_disease   = False,
 
-            # Disease information
-            result=disease_info,
+            # ── Plant severity ────────────────────────────────────────────────
+            plant_severity       = 0,
+            plant_severity_level = "N/A",
 
-            # Farm data
-            area=area,
-            area_unit=area_unit,
-            location=location,
+            # ── Disease information ───────────────────────────────────────────
+            result             = disease_info,
 
-            # Dosage (not calculated in cloud mode)
-            chemical_dosage=None,
-            organic_dosage=None,
-            hectare_conversion=0,
+            # ── Farm data ─────────────────────────────────────────────────────
+            area               = area,
+            area_unit          = area_unit,
+            location           = location,
 
-            # Infection-aware fields
-            infection_percent=0,
-            plant_severity_pct=0,
-            effective_infection_pct=0,
-            area_in_hectares=0,
-            effective_area_hectares=0,
+            # ── Dosage (not calculated in cloud mode) ─────────────────────────
+            chemical_dosage    = None,
+            organic_dosage     = None,
+            hectare_conversion = 0,
 
-            # Leaf results
-            leaf_results=[],
+            # ── Infection-aware fields ────────────────────────────────────────
+            infection_percent      = 0,
+            plant_severity_pct     = 0,
+            effective_infection_pct= 0,
+            area_in_hectares       = 0,
+            effective_area_hectares= 0,
 
-            # Comparison / history
-            has_previous=False,
-            comparison=None,
-            days_since_last=0,
+            # ── Leaf results ──────────────────────────────────────────────────
+            leaf_results       = [],
 
-            # Weekly assessment (minimal placeholder)
-            assessment={
-                'week_number': 1,
-                'is_first_assessment': True,
-                'recommendation': (
-                    'AI model is currently paused on the cloud deployment. '
-                    'Please use the KisanAI Chatbot or Talk to Expert for guidance.'
-                ),
-                'dosage_recommendation': 'maintain',
-                'next_assessment_date': (datetime.now() + timedelta(days=7)).strftime('%Y-%m-%d')
-            },
-            has_assessment=True,
-            show_dosage_change=False
+            # ── Comparison / history ──────────────────────────────────────────
+            has_previous       = False,
+            comparison         = None,
+            days_since_last    = 0,
+
+            # ── Weekly assessment (live data from DB) ─────────────────────────
+            assessment         = assessment_result,
+            has_assessment     = True,
+            show_dosage_change = show_dosage_change
         )
 
     except Exception as e:
@@ -2182,15 +2276,20 @@ def analyze():
         return render_template("error.html", back_link="/detection-tool"), 500
 
 
+# ============================================================================
+# END /predict
+# ============================================================================
+
+
 @app.route('/health')
 def health_check():
     health_status = {
-        "status": "ok",
-        "model_loaded": model is not None,
-        "treatments_loaded": len(disease_treatments) > 0,
-        "upload_dir_exists": os.path.exists(app.config['UPLOAD_FOLDER']),
-        "total_diseases": len(disease_treatments),
-        "cloud_mode": True
+        "status"            : "ok",
+        "model_loaded"      : model is not None,
+        "treatments_loaded" : len(disease_treatments) > 0,
+        "upload_dir_exists" : os.path.exists(app.config['UPLOAD_FOLDER']),
+        "total_diseases"    : len(disease_treatments),
+        "cloud_mode"        : True
     }
     return jsonify(health_status)
 
@@ -2233,8 +2332,8 @@ def calculate_dosage_api():
         data = request.json
 
         disease_name = data.get('disease_name')
-        area = data.get('area')
-        area_unit = data.get('area_unit', 'hectare')
+        area         = data.get('area')
+        area_unit    = data.get('area_unit', 'hectare')
 
         try:
             infection_percent = float(data.get('infection_percent', 50))
@@ -2262,8 +2361,8 @@ def calculate_dosage_api():
                 'hectare': 1.0, 'acre': 0.404686,
                 'square_meter': 0.0001, 'square_feet': 0.0000092903
             }
-            total_ha = float(area or 0) * CONVERSIONS.get(area_unit, 1.0)
-            effective_ha = total_ha * (effective_pct / 100.0)
+            total_ha    = float(area or 0) * CONVERSIONS.get(area_unit, 1.0)
+            effective_ha= total_ha * (effective_pct / 100.0)
 
             if effective_pct >= 75:
                 severity_mult = 1.25
@@ -2275,24 +2374,24 @@ def calculate_dosage_api():
                 severity_mult = 0.85
 
             chem_info = disease_info['pesticide'].get('chemical', {})
-            org_info = disease_info['pesticide'].get('organic', {})
+            org_info  = disease_info['pesticide'].get('organic', {})
 
             return jsonify({
-                'success': True,
-                'chemical_dosage': chemical_dosage,
-                'organic_dosage': organic_dosage,
-                'hectare_conversion': hectare_conversion,
-                'area': area,
-                'area_unit': area_unit,
+                'success'               : True,
+                'chemical_dosage'       : chemical_dosage,
+                'organic_dosage'        : organic_dosage,
+                'hectare_conversion'    : hectare_conversion,
+                'area'                  : area,
+                'area_unit'             : area_unit,
                 'effective_infection_pct': round(effective_pct, 1),
-                'plant_severity_ai': round(plant_severity, 1),
-                'user_reported_pct': round(infection_percent, 1),
-                'total_area_hectares': round(total_ha, 4),
+                'plant_severity_ai'     : round(plant_severity, 1),
+                'user_reported_pct'     : round(infection_percent, 1),
+                'total_area_hectares'   : round(total_ha, 4),
                 'effective_area_hectares': round(effective_ha, 4),
-                'severity_multiplier': severity_mult,
-                'pesticide_names': {
+                'severity_multiplier'   : severity_mult,
+                'pesticide_names'       : {
                     'chemical': chem_info.get('name', 'N/A'),
-                    'organic': org_info.get('name', 'N/A'),
+                    'organic' : org_info.get('name',  'N/A'),
                 },
                 'breakdown_text': (
                     f"{round(effective_pct, 1)}% of your field ({round(effective_ha, 3)} ha) "
@@ -2317,7 +2416,7 @@ def calculate_dosage_api():
 def nutrition_testing():
     return render_template('nutrition_testing.html',
                            user=current_user,
-                           location=current_user.location if hasattr(current_user, 'location') else '',
+                           location =current_user.location  if hasattr(current_user, 'location')  else '',
                            land_area=current_user.land_area if hasattr(current_user, 'land_area') else 0,
                            area_unit=current_user.area_unit if hasattr(current_user, 'area_unit') else 'square_meter')
 
@@ -2344,9 +2443,9 @@ def analyze_nutrition():
         return render_template("error.html", back_link="/nutrition-testing")
 
     try:
-        location = request.form.get("location", "").strip()
-        area = request.form.get("area", "0")
-        area_unit = request.form.get("area_unit", "square_meter")
+        location   = request.form.get("location", "").strip()
+        area       = request.form.get("area", "0")
+        area_unit  = request.form.get("area_unit", "square_meter")
         area_float = float(area) if area else 0.0
 
         try:
@@ -2362,7 +2461,7 @@ def analyze_nutrition():
             db.session.rollback()
 
         image_filename = str(uuid.uuid4()) + os.path.splitext(image_file.filename)[1]
-        image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_filename)
+        image_path     = os.path.join(app.config['UPLOAD_FOLDER'], image_filename)
         image_file.save(image_path)
         logger.info(f"✅ Image saved to: {image_path}")
 
@@ -2376,38 +2475,36 @@ def analyze_nutrition():
 
         if len(diagnoses) == 0:
             return render_template('nutrition_result.html',
-                                   healthy=True,
-                                   image_url=url_for('static', filename=f'uploads/{image_filename}'),
-                                   location=location,
-                                   area=area,
-                                   area_unit=area_unit,
+                                   healthy      = True,
+                                   image_url    = url_for('static', filename=f'uploads/{image_filename}'),
+                                   location     = location,
+                                   area         = area,
+                                   area_unit    = area_unit,
                                    color_analysis=analysis_result['color_analysis'])
 
         primary_deficiency = diagnoses[0]
 
         if area_float > 0:
             chemical_dosage, organic_dosage, hectare_conversion = calculate_fertilizer_dosage(
-                area_float,
-                area_unit,
-                primary_deficiency['fertilizer']
+                area_float, area_unit, primary_deficiency['fertilizer']
             )
         else:
-            chemical_dosage = None
-            organic_dosage = None
-            hectare_conversion = 0
+            chemical_dosage   = None
+            organic_dosage    = None
+            hectare_conversion= 0
 
         return render_template('nutrition_result.html',
-                               healthy=False,
-                               diagnoses=diagnoses,
-                               primary_deficiency=primary_deficiency,
-                               image_url=url_for('static', filename=f'uploads/{image_filename}'),
-                               location=location,
-                               area=area,
-                               area_unit=area_unit,
-                               chemical_dosage=chemical_dosage,
-                               organic_dosage=organic_dosage,
-                               hectare_conversion=hectare_conversion,
-                               color_analysis=analysis_result['color_analysis'])
+                               healthy            = False,
+                               diagnoses          = diagnoses,
+                               primary_deficiency = primary_deficiency,
+                               image_url          = url_for('static', filename=f'uploads/{image_filename}'),
+                               location           = location,
+                               area               = area,
+                               area_unit          = area_unit,
+                               chemical_dosage    = chemical_dosage,
+                               organic_dosage     = organic_dosage,
+                               hectare_conversion = hectare_conversion,
+                               color_analysis     = analysis_result['color_analysis'])
 
     except Exception as e:
         logger.error("=" * 80)
@@ -2438,10 +2535,10 @@ def nutrition_api(deficiency_key):
 @app.route('/api/calculate-fertilizer', methods=['POST'])
 def calculate_fertilizer_api():
     try:
-        data = request.json
-        deficiency_key = data.get('deficiency_key')
-        area = data.get('area')
-        area_unit = data.get('area_unit', 'hectare')
+        data          = request.json
+        deficiency_key= data.get('deficiency_key')
+        area          = data.get('area')
+        area_unit     = data.get('area_unit', 'hectare')
 
         if deficiency_key in nutrition_deficiency_data:
             deficiency_info = nutrition_deficiency_data[deficiency_key]
@@ -2451,12 +2548,12 @@ def calculate_fertilizer_api():
             )
 
             return jsonify({
-                'success': True,
-                'chemical_dosage': chemical_dosage,
-                'organic_dosage': organic_dosage,
+                'success'           : True,
+                'chemical_dosage'   : chemical_dosage,
+                'organic_dosage'    : organic_dosage,
                 'hectare_conversion': hectare_conversion,
-                'area': area,
-                'area_unit': area_unit
+                'area'              : area,
+                'area_unit'         : area_unit
             })
         else:
             return jsonify({'success': False, 'error': 'Deficiency information not found'}), 404
@@ -2497,7 +2594,7 @@ migrate_expert_uploads()
 
 def init_expert_db():
     conn = _sq3.connect("database.db")
-    cur = conn.cursor()
+    cur  = conn.cursor()
     cur.execute("""CREATE TABLE IF NOT EXISTS expert_requests(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         phone TEXT, crop TEXT, description TEXT,
@@ -2519,24 +2616,26 @@ def talk_to_expert():
 
 @app.route("/submit-expert", methods=["POST"])
 def submit_expert():
-    phone = request.form.get("phone")
-    crop = request.form.get("crop")
+    phone       = request.form.get("phone")
+    crop        = request.form.get("crop")
     description = request.form.get("description")
-    image = request.files.get("image")
-    audio = request.files.get("audio")
+    image       = request.files.get("image")
+    audio       = request.files.get("audio")
     image_path, audio_path = "", ""
     if image and image.filename != "":
-        fname = str(uuid.uuid4()) + "_" + _sfn(image.filename)
+        fname      = str(uuid.uuid4()) + "_" + _sfn(image.filename)
         image_path = os.path.join(EXPERT_UPLOAD_DIR, fname)
         image.save(image_path)
     if audio and audio.filename != "":
-        fname = str(uuid.uuid4()) + "_" + _sfn(audio.filename)
+        fname      = str(uuid.uuid4()) + "_" + _sfn(audio.filename)
         audio_path = os.path.join(EXPERT_UPLOAD_DIR, fname)
         audio.save(audio_path)
     conn = _sq3.connect("database.db")
-    cur = conn.cursor()
-    cur.execute("INSERT INTO expert_requests(phone,crop,description,image_path,audio_path) VALUES(?,?,?,?,?)",
-                (phone, crop, description, image_path, audio_path))
+    cur  = conn.cursor()
+    cur.execute(
+        "INSERT INTO expert_requests(phone,crop,description,image_path,audio_path) VALUES(?,?,?,?,?)",
+        (phone, crop, description, image_path, audio_path)
+    )
     conn.commit()
     conn.close()
     return redirect("/enter-phone")
@@ -2549,14 +2648,16 @@ def enter_phone():
 
 @app.route("/check-requests", methods=["GET", "POST"])
 def check_requests():
-    rows = []
+    rows  = []
     phone = ""
     if request.method == "POST":
         phone = request.form.get("phone", "").strip()
         if phone:
             conn = _sq3.connect("database.db")
-            cur = conn.cursor()
-            cur.execute("SELECT * FROM expert_requests WHERE phone=? ORDER BY created_at DESC", (phone,))
+            cur  = conn.cursor()
+            cur.execute(
+                "SELECT * FROM expert_requests WHERE phone=? ORDER BY created_at DESC", (phone,)
+            )
             rows = cur.fetchall()
             conn.close()
     return render_template("check_requests.html", requests=rows, phone=phone)
@@ -2564,14 +2665,16 @@ def check_requests():
 
 @app.route("/farmer-dashboard", methods=["GET", "POST"])
 def farmer_dashboard():
-    rows = []
+    rows  = []
     phone = ""
     if request.method == "POST":
         phone = request.form.get("phone", "").strip()
         if phone:
             conn = _sq3.connect("database.db")
-            cur = conn.cursor()
-            cur.execute("SELECT * FROM expert_requests WHERE phone=? ORDER BY created_at DESC", (phone,))
+            cur  = conn.cursor()
+            cur.execute(
+                "SELECT * FROM expert_requests WHERE phone=? ORDER BY created_at DESC", (phone,)
+            )
             rows = cur.fetchall()
             conn.close()
     return render_template("farmer_dashboard.html", rows=rows, phone=phone)
@@ -2584,7 +2687,8 @@ EXPERT_ADMIN_PASS = "Agripal@123"
 @app.route("/admin-login", methods=["GET", "POST"])
 def admin_login():
     if request.method == "POST":
-        if request.form.get("username") == EXPERT_ADMIN_USER and request.form.get("password") == EXPERT_ADMIN_PASS:
+        if (request.form.get("username") == EXPERT_ADMIN_USER and
+                request.form.get("password") == EXPERT_ADMIN_PASS):
             session["admin"] = True
             return redirect("/admin")
     return render_template("login.html")
@@ -2595,7 +2699,7 @@ def admin_dashboard():
     if not session.get("admin"):
         return redirect("/admin-login")
     conn = _sq3.connect("database.db")
-    cur = conn.cursor()
+    cur  = conn.cursor()
     cur.execute("SELECT * FROM expert_requests ORDER BY created_at DESC")
     rows = cur.fetchall()
     conn.close()
@@ -2607,8 +2711,11 @@ def expert_reply(req_id):
     if not session.get("admin"):
         return redirect("/admin-login")
     conn = _sq3.connect("database.db")
-    cur = conn.cursor()
-    cur.execute("UPDATE expert_requests SET reply=? WHERE id=?", (request.form.get("reply"), req_id))
+    cur  = conn.cursor()
+    cur.execute(
+        "UPDATE expert_requests SET reply=? WHERE id=?",
+        (request.form.get("reply"), req_id)
+    )
     conn.commit()
     conn.close()
     return redirect("/admin")
@@ -2630,11 +2737,11 @@ def expert_logout():
 
 class _AgriConfig:
     MYSQL_CONFIG = {
-        'host': os.environ.get('MYSQL_HOST', 'localhost'),
-        'user': os.environ.get('MYSQL_USER', 'root'),
+        'host'    : os.environ.get('MYSQL_HOST',     'localhost'),
+        'user'    : os.environ.get('MYSQL_USER',     'root'),
         'password': os.environ.get('MYSQL_PASSWORD', 'pavan'),
         'database': os.environ.get('MYSQL_DATABASE', 'agriculture_llm'),
-        'port': int(os.environ.get('MYSQL_PORT', 3306)),
+        'port'    : int(os.environ.get('MYSQL_PORT',  3306)),
     }
 
     VECTOR_DB_PATH = os.environ.get('CHROMA_PATH', str(
@@ -2642,9 +2749,9 @@ class _AgriConfig:
 
     EMBEDDING_MODEL = os.environ.get('EMBEDDING_MODEL', 'all-MiniLM-L6-v2')
 
-    CHUNK_SIZE = 800
+    CHUNK_SIZE    = 800
     CHUNK_OVERLAP = 100
-    MIN_CHUNK_SIZE = 200
+    MIN_CHUNK_SIZE= 200
 
     CROP_CATEGORIES = [
         'Rice', 'Wheat', 'Maize', 'Corn', 'Cotton', 'Sugarcane',
@@ -2668,17 +2775,17 @@ class _AgriConfig:
 
     SEASONS = ['Kharif', 'Rabi', 'Zaid', 'Zayad', 'Summer', 'Winter', 'Monsoon', 'Perennial', 'Annual']
 
-    TOP_K_DOCUMENTS = 5
+    TOP_K_DOCUMENTS   = 5
     SIMILARITY_THRESHOLD = 0.3
-    MAX_CONTEXT_TOKENS = 8000
+    MAX_CONTEXT_TOKENS= 8000
 
     INTENT_KEYWORDS = {
-        'scheme': ['scheme', 'subsidy', 'yojana', 'benefit', 'government', 'pm-kisan', 'pmfby'],
+        'scheme'      : ['scheme', 'subsidy', 'yojana', 'benefit', 'government', 'pm-kisan', 'pmfby'],
         'market_price': ['price', 'mandi', 'market', 'rate', 'sell', 'buy', 'cost'],
-        'disease': ['disease', 'pest', 'infection', 'treatment', 'cure', 'control', 'fungus'],
-        'crop_guide': ['cultivation', 'farming', 'planting', 'sowing', 'harvest', 'grow'],
-        'fertilizer': ['fertilizer', 'nutrient', 'soil', 'compost', 'npk', 'organic'],
-        'weather': ['weather', 'rainfall', 'temperature', 'climate', 'forecast'],
+        'disease'     : ['disease', 'pest', 'infection', 'treatment', 'cure', 'control', 'fungus'],
+        'crop_guide'  : ['cultivation', 'farming', 'planting', 'sowing', 'harvest', 'grow'],
+        'fertilizer'  : ['fertilizer', 'nutrient', 'soil', 'compost', 'npk', 'organic'],
+        'weather'     : ['weather', 'rainfall', 'temperature', 'climate', 'forecast'],
     }
 
 
@@ -2689,11 +2796,11 @@ class AgricultureChatbot:
     """KisanAI chatbot: combines MySQL queries + ChromaDB vector search."""
 
     def __init__(self):
-        self.mysql_conn = None
+        self.mysql_conn   = None
         self.mysql_cursor = None
         if MYSQL_AVAILABLE:
             try:
-                self.mysql_conn = _mysql.connect(**_agri_config.MYSQL_CONFIG)
+                self.mysql_conn   = _mysql.connect(**_agri_config.MYSQL_CONFIG)
                 self.mysql_cursor = self.mysql_conn.cursor(dictionary=True)
                 logger.info("✅ KisanAI: MySQL connected")
             except Exception as e:
@@ -2702,9 +2809,9 @@ class AgricultureChatbot:
         self.collection = None
         if CHROMA_AVAILABLE:
             try:
-                chroma_client = _chromadb.PersistentClient(
-                    path=_agri_config.VECTOR_DB_PATH,
-                    settings=_ChromaSettings(anonymized_telemetry=False)
+                chroma_client   = _chromadb.PersistentClient(
+                    path    = _agri_config.VECTOR_DB_PATH,
+                    settings= _ChromaSettings(anonymized_telemetry=False)
                 )
                 self.collection = chroma_client.get_collection("agriculture_docs")
                 logger.info("✅ KisanAI: Vector DB connected")
@@ -2730,24 +2837,19 @@ class AgricultureChatbot:
         }
         kw = _agri_config.INTENT_KEYWORDS
         if any(w in q for w in kw['market_price'] + ['msp', 'mandi']):
-            c['type'] = 'price'
-            c['needs_price'] = True
+            c['type'] = 'price';    c['needs_price']      = True
         elif any(w in q for w in kw['weather'] + ['rain', 'monsoon']):
-            c['type'] = 'weather'
-            c['needs_weather'] = True
+            c['type'] = 'weather';  c['needs_weather']    = True
         elif any(w in q for w in kw['scheme'] + ['loan']):
-            c['type'] = 'scheme'
-            c['needs_scheme'] = True
+            c['type'] = 'scheme';   c['needs_scheme']     = True
         elif any(w in q for w in kw['crop_guide'] + ['production', 'yield', 'area']):
-            c['type'] = 'production'
-            c['needs_production'] = True
+            c['type'] = 'production'; c['needs_production'] = True
         elif any(w in q for w in kw['disease'] + ['insect']):
-            c['type'] = 'pest'
-            c['needs_pest'] = True
+            c['type'] = 'pest';     c['needs_pest']       = True
         return c
 
     def extract_entities(self, query):
-        q = query.lower()
+        q        = query.lower()
         entities = {'crop': None, 'state': None, 'season': None}
         for crop in _agri_config.CROP_CATEGORIES:
             if crop.lower() in q:
@@ -2776,46 +2878,41 @@ class AgricultureChatbot:
             return []
 
     def get_market_prices(self, crop=None, state=None):
-        sql = """SELECT DISTINCT crop_name, state, district, market, variety,
+        sql    = """SELECT DISTINCT crop_name, state, district, market, variety,
                         min_price, max_price, modal_price, msp, date
                  FROM market_prices WHERE 1=1"""
         params = []
         if crop:
-            sql += " AND crop_name LIKE %s"
-            params.append(f"%{crop}%")
+            sql += " AND crop_name LIKE %s";  params.append(f"%{crop}%")
         if state:
-            sql += " AND state LIKE %s"
-            params.append(f"%{state}%")
+            sql += " AND state LIKE %s";      params.append(f"%{state}%")
         sql += " ORDER BY date DESC LIMIT 10"
         return self._run_query(sql, params)
 
     def get_schemes(self, state=None):
-        sql = """SELECT DISTINCT scheme_name, scheme_type, state, description,
+        sql    = """SELECT DISTINCT scheme_name, scheme_type, state, description,
                         eligibility, benefits, application_process, contact_info
                  FROM government_schemes WHERE is_active = TRUE"""
         params = []
         if state:
-            sql += " AND (state LIKE %s OR state = 'All India')"
-            params.append(f"%{state}%")
+            sql += " AND (state LIKE %s OR state = 'All India')";  params.append(f"%{state}%")
         sql += " LIMIT 5"
         return self._run_query(sql, params)
 
     def get_production_data(self, crop=None, state=None):
-        sql = """SELECT DISTINCT year, season, state, district, crop_name,
+        sql    = """SELECT DISTINCT year, season, state, district, crop_name,
                         area_hectares, production_tonnes, yield_per_hectare
                  FROM crop_production WHERE 1=1"""
         params = []
         if crop:
-            sql += " AND crop_name LIKE %s"
-            params.append(f"%{crop}%")
+            sql += " AND crop_name LIKE %s";  params.append(f"%{crop}%")
         if state:
-            sql += " AND state LIKE %s"
-            params.append(f"%{state}%")
+            sql += " AND state LIKE %s";      params.append(f"%{state}%")
         sql += " ORDER BY year DESC LIMIT 10"
         return self._run_query(sql, params)
 
     def get_pest_info(self, query_text):
-        sql = """SELECT DISTINCT name, type, affected_crops, symptoms, causes,
+        sql  = """SELECT DISTINCT name, type, affected_crops, symptoms, causes,
                         prevention, treatment, severity, season
                  FROM pest_diseases WHERE name LIKE %s OR affected_crops LIKE %s LIMIT 5"""
         term = f"%{query_text}%"
@@ -2826,7 +2923,7 @@ class AgricultureChatbot:
         if not self.collection or not self.embedding_model:
             return empty
         try:
-            emb = self.embedding_model.encode(query)
+            emb    = self.embedding_model.encode(query)
             kwargs = {'query_embeddings': [emb.tolist()], 'n_results': n_results}
             if filters:
                 conditions = []
@@ -2861,9 +2958,9 @@ class AgricultureChatbot:
         return True
 
     def generate_response(self, query):
-        start = _time.time()
+        start          = _time.time()
         classification = self.classify_query(query)
-        entities = self.extract_entities(query)
+        entities       = self.extract_entities(query)
 
         response_data = {
             'query': query, 'classification': classification['type'],
@@ -2871,17 +2968,17 @@ class AgricultureChatbot:
         }
 
         if classification['needs_price']:
-            response_data['sql_data']['prices'] = self.get_market_prices(entities['crop'], entities['state'])
+            response_data['sql_data']['prices']     = self.get_market_prices(entities['crop'], entities['state'])
         if classification['needs_scheme']:
-            response_data['sql_data']['schemes'] = self.get_schemes(entities['state'])
+            response_data['sql_data']['schemes']    = self.get_schemes(entities['state'])
         if classification['needs_production']:
             response_data['sql_data']['production'] = self.get_production_data(entities['crop'], entities['state'])
         if classification['needs_pest']:
-            response_data['sql_data']['pest_info'] = self.get_pest_info(query)
+            response_data['sql_data']['pest_info']  = self.get_pest_info(query)
 
         if classification['needs_docs']:
-            doc_filters = {k: v for k, v in entities.items() if v}
-            doc_results = self.search_documents(query, n_results=5, filters=doc_filters or None)
+            doc_filters  = {k: v for k, v in entities.items() if v}
+            doc_results  = self.search_documents(query, n_results=5, filters=doc_filters or None)
             if doc_results['documents'][0]:
                 clean_docs = []
                 for doc, meta, dist in zip(
@@ -2893,7 +2990,7 @@ class AgricultureChatbot:
                         clean_docs.append({'text': doc, 'metadata': meta, 'relevance_score': 1 - dist})
                 response_data['documents'] = clean_docs[:2]
 
-        response_data['answer'] = self.format_answer(response_data, classification)
+        response_data['answer']           = self.format_answer(response_data, classification)
         response_data['response_time_ms'] = int((_time.time() - start) * 1000)
         self.log_query(query, classification['type'], entities, response_data['response_time_ms'])
         return response_data
@@ -2950,9 +3047,9 @@ class AgricultureChatbot:
         if response_data['documents'] and not has_sql:
             parts.append("\n📚 Related Agricultural Knowledge:\n")
             for i, doc in enumerate(response_data['documents'], 1):
-                clean = _re.sub(r'\n{3,}', '\n\n', doc['text']).strip()
+                clean   = _re.sub(r'\n{3,}', '\n\n', doc['text']).strip()
                 preview = clean[:350] + "…" if len(clean) > 350 else clean
-                source = doc['metadata'].get('source_file', 'Agricultural Document')
+                source  = doc['metadata'].get('source_file', 'Agricultural Document')
                 parts.append(f"{i}. {preview}\n   Source: {source}\n")
 
         if not parts:
@@ -2994,7 +3091,7 @@ logger.info("✅ KisanAI AgricultureChatbot initialized")
 @app.route('/chat', methods=['POST'])
 def kisan_chat():
     """KisanAI chat endpoint — used by chatbot.html"""
-    data = request.get_json(silent=True) or {}
+    data  = request.get_json(silent=True) or {}
     query = data.get('query', '').strip()
     if not query:
         return jsonify({'error': 'No query provided'}), 400
@@ -3052,7 +3149,7 @@ if __name__ == '__main__':
 
     serve(
         app,
-        host='0.0.0.0',
-        port=5000,
-        threads=8
+        host   = '0.0.0.0',
+        port   = 5000,
+        threads= 8
     )
