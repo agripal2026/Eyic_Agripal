@@ -1127,11 +1127,11 @@
                         <div class="summary-grid">
                             <div class="summary-item">
                                 <span class="label">🔬 Disease Detected</span>
-                                <span class="value">{{ predicted_class|replace('_', ' ') }}</span>
+                                <span class="value">{{ predicted_class|replace('_', ' ') if predicted_class else 'Unknown' }}</span>
                             </div>
                             <div class="summary-item">
                                 <span class="label">📊 AI Confidence</span>
-                                <span class="value">{{ "%.1f"|format(confidence) }}%</span>
+                                <span class="value">{% if confidence is not none %}{{ "%.1f"|format(confidence) }}%{% else %}N/A{% endif %}</span>
                             </div>
                             <div class="summary-item">
                                 <span class="label">⚠️ Severity Level</span>
@@ -1617,7 +1617,7 @@
                             <!-- Combined Pesticide Treatments -->
                             <div class="row">
                                 <!-- Chemical Treatment -->
-                                {% if combined_treatments.pesticide.chemical and combined_treatments.pesticide.chemical.usage %}
+                                {% if combined_treatments.pesticide and combined_treatments.pesticide.chemical and combined_treatments.pesticide.chemical.usage %}
                                 <div class="col-md-6 mb-3">
                                     <div style="background: linear-gradient(135deg, rgba(227, 242, 253, 0.95) 0%, rgba(187, 222, 251, 0.95) 100%); padding: 25px; border-radius: 15px; border: 2px solid #2196f3; height: 100%;">
                                         <h6 style="color: #1565c0; font-size: 1.3rem; margin-bottom: 20px;">
@@ -1679,12 +1679,12 @@
                                                 </a>
                                             </div>
                                         </div>
-</div>
+                                    </div>
                                 </div>
                                 {% endif %}
                                 
                                 <!-- Organic Treatment -->
-                                {% if combined_treatments.pesticide.organic and combined_treatments.pesticide.organic.usage %}
+                                {% if combined_treatments.pesticide and combined_treatments.pesticide.organic and combined_treatments.pesticide.organic.usage %}
                                 <div class="col-md-6 mb-3">
                                     <div style="background: linear-gradient(135deg, rgba(232, 245, 233, 0.95) 0%, rgba(200, 230, 201, 0.95) 100%); padding: 25px; border-radius: 15px; border: 2px solid #4caf50; height: 100%;">
                                         <h6 style="color: #2e7d32; font-size: 1.3rem; margin-bottom: 20px;">
@@ -1746,7 +1746,7 @@
                                                 </a>
                                             </div>
                                         </div>
-</div>
+                                    </div>
                                 </div>
                                 {% endif %}
                             </div>
@@ -1757,7 +1757,7 @@
                                     <i class="fas fa-exclamation-circle"></i> ⚠️ Important Notice
                                 </h6>
                                 <p style="margin: 0; color: #333; line-height: 1.6;">
-                                    <strong>Combined Severity:</strong> <span style="background: #fff; padding: 4px 12px; border-radius: 15px; color: #e65100;">{{ combined_treatments.severity }}</span><br><br>
+                                    <strong>Combined Severity:</strong> <span style="background: #fff; padding: 4px 12px; border-radius: 15px; color: #e65100;">{{ combined_treatments.severity if combined_treatments.severity else 'N/A' }}</span><br><br>
                                     Since multiple diseases are present, immediate action is recommended. Apply treatments as per the combined schedule above. 
                                     Monitor your plants daily and consult with a local agricultural extension officer if conditions worsen.
                                 </p>
@@ -1813,27 +1813,42 @@
             </div>
             {% endif %}
 
-            <!-- SINGLE DISEASE SECTION - Only shown when NOT multi-disease -->
+            <!-- ============================================================ -->
+            <!-- SINGLE DISEASE SECTION                                        -->
+            <!-- FIX: Every sub-section guarded with its own {% if %} check   -->
+            <!-- so None values on result, pesticide, dosage never cause a     -->
+            <!-- TypeError / UndefinedError in Jinja2.                        -->
+            <!-- ============================================================ -->
             {% if not is_multi_disease and result %}
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="info-treatment-grid">
-                        <!-- Disease Information -->
+
+                        <!-- ── Disease Information ── -->
                         <div class="disease-info-card">
                             <h3><i class="fas fa-virus"></i> Disease Information</h3>
-                            
-                            <span class="severity-badge severity-{{ severity|lower if severity else 'unknown' }}">
+
+                            <span class="severity-badge severity-{{ (severity|lower) if severity else 'unknown' }}">
                                 <i class="fas fa-exclamation-triangle"></i> {{ severity if severity else 'Unknown' }} Severity
                             </span>
 
+                            <!-- FIX: guard result.description before rendering -->
+                            {% if result.description %}
                             <div class="treatment-info-box">
                                 <strong>📋 About This Disease</strong>
                                 <div class="mb-0 text-muted" style="line-height: 1.8;">
-                                    {{ result.description|safe if result.description else 'No description available.' }}
+                                    {{ result.description|safe }}
                                 </div>
                             </div>
+                            {% else %}
+                            <div class="treatment-info-box">
+                                <strong>📋 About This Disease</strong>
+                                <p class="mb-0 text-muted">Disease description unavailable.</p>
+                            </div>
+                            {% endif %}
 
-                            {% if result.treatment %}
+                            <!-- FIX: guard result.treatment before looping -->
+                            {% if result.treatment and result.treatment|length > 0 %}
                             <div class="mt-3">
                                 <h6 class="fw-bold text-dark mb-3">🎯 Treatment Steps</h6>
                                 {% for step in result.treatment %}
@@ -1842,39 +1857,77 @@
                                 </div>
                                 {% endfor %}
                             </div>
+                            {% else %}
+                            <div class="mt-3">
+                                <p class="text-muted">Treatment steps unavailable in the current mode.</p>
+                            </div>
                             {% endif %}
                         </div>
 
-                        <!-- Chemical Treatment -->
+                        <!-- ── Chemical Treatment ── -->
+                        {# FIX: guard every level of the pesticide chain individually #}
                         {% if result.pesticide and result.pesticide.chemical %}
                         <div class="pesticide-card chemical-card">
                             <div class="pesticide-header">
                                 <i class="fas fa-flask"></i>
                                 <h6>Chemical Treatment</h6>
                             </div>
-                            
+
+                            <!-- FIX: guard .name before rendering it -->
+                            {% if result.pesticide.chemical.name %}
                             <div class="treatment-name">
                                 <p>{{ result.pesticide.chemical.name }}</p>
                             </div>
+                            {% endif %}
 
+                            <!-- ── Dosage Block ── -->
+                            {# FIX: chemical_dosage is the calculated value from Flask.         #}
+                            {# Guard with `if chemical_dosage` so None never hits format().     #}
+                            {# Inner values (.unit, .dosage_per_hectare) guarded individually.  #}
                             {% if chemical_dosage %}
                             <div class="dosage-calculator">
                                 <h6><i class="fas fa-calculator"></i> Required Dosage</h6>
-                                <div class="dosage-amount">{{ "%.1f"|format(chemical_dosage) }} {{ result.pesticide.chemical.unit }}</div>
+                                <div class="dosage-amount">
+                                    {{ "%.1f"|format(chemical_dosage) }}
+                                    {% if result.pesticide.chemical.unit %} {{ result.pesticide.chemical.unit }}{% endif %}
+                                </div>
+                                {% if area and area_unit %}
                                 <small>For {{ area }} {{ area_unit }}</small>
+                                {% endif %}
+                                {% if result.pesticide.chemical.dosage_per_hectare and result.pesticide.chemical.unit %}
                                 <span class="dosage-info">Base: {{ result.pesticide.chemical.dosage_per_hectare }} {{ result.pesticide.chemical.unit }}/hectare</span>
+                                {% endif %}
                             </div>
+
+                            {# FIX: elif only checks .dosage_per_hectare — safe because result.pesticide.chemical already confirmed above #}
                             {% elif result.pesticide.chemical.dosage_per_hectare %}
                             <div class="dosage-calculator" style="background: rgba(255, 243, 224, 0.5); border: 2px dashed #ff9800;">
                                 <h6><i class="fas fa-calculator"></i> Dosage Calculator</h6>
                                 <div style="padding: 15px; color: #e65100;">
-                                    <p style="margin-bottom: 10px;"><i class="fas fa-info-circle"></i> <strong>Standard dosage:</strong> {{ result.pesticide.chemical.dosage_per_hectare }} {{ result.pesticide.chemical.unit }}/hectare</p>
+                                    <p style="margin-bottom: 10px;">
+                                        <i class="fas fa-info-circle"></i>
+                                        <strong>Standard dosage:</strong>
+                                        {{ result.pesticide.chemical.dosage_per_hectare }}
+                                        {% if result.pesticide.chemical.unit %} {{ result.pesticide.chemical.unit }}{% endif %}/hectare
+                                    </p>
                                     <p style="margin: 0; font-size: 0.9em;">💡 Enter your land area in the form above to calculate the exact dosage needed</p>
+                                </div>
+                            </div>
+
+                            {% else %}
+                            {# FIX: no dosage data available at all — show informative fallback #}
+                            <div class="dosage-calculator" style="background: rgba(200,200,200,0.3); border: 2px dashed #aaa;">
+                                <h6><i class="fas fa-calculator"></i> Dosage Calculator</h6>
+                                <div style="padding: 15px; color: #555;">
+                                    <p style="margin: 0; font-size: 0.95em;">
+                                        <i class="fas fa-info-circle"></i>
+                                        Dosage calculation unavailable. Please consult the product label or a local agronomist.
+                                    </p>
                                 </div>
                             </div>
                             {% endif %}
 
-                            <!-- Usage Instructions -->
+                            <!-- FIX: guard .usage before rendering -->
                             {% if result.pesticide.chemical.usage %}
                             <div class="treatment-info-box">
                                 <strong><i class="fas fa-hand-sparkles"></i> Usage Instructions</strong>
@@ -1882,7 +1935,7 @@
                             </div>
                             {% endif %}
 
-                            <!-- Application Frequency -->
+                            <!-- FIX: guard .frequency before rendering -->
                             {% if result.pesticide.chemical.frequency %}
                             <div class="treatment-info-box">
                                 <strong><i class="fas fa-calendar-check"></i> Application Frequency</strong>
@@ -1890,29 +1943,27 @@
                             </div>
                             {% endif %}
 
-                            <!-- Video Resources -->
-                            {% if result.pesticide.chemical.video_sources %}
+                            <!-- FIX: guard video_sources and search_urls before looping -->
+                            {% if result.pesticide.chemical.video_sources and result.pesticide.chemical.video_sources.search_urls %}
                             <div class="video-section">
                                 <h6><i class="fab fa-youtube"></i> Video Tutorials</h6>
-                                {% if result.pesticide.chemical.video_sources.search_urls %}
-                                    {% for video in result.pesticide.chemical.video_sources.search_urls[:3] %}
-                                    <a href="{{ video.url }}" target="_blank" class="video-link">
-                                        <i class="fas fa-play-circle"></i> {{ video.term }}
-                                    </a>
-                                    {% endfor %}
-                                {% endif %}
+                                {% for video in result.pesticide.chemical.video_sources.search_urls[:3] %}
+                                <a href="{{ video.url }}" target="_blank" class="video-link">
+                                    <i class="fas fa-play-circle"></i> {{ video.term }}
+                                </a>
+                                {% endfor %}
                             </div>
                             {% endif %}
 
-                            <!-- Safety Precautions -->
+                            <!-- FIX: guard .safety before rendering -->
                             {% if result.pesticide.chemical.safety %}
                             <div class="alert-custom">
                                 <strong><i class="fas fa-shield-alt"></i> Safety Precautions:</strong>
                                 <p class="mb-0 mt-2">{{ result.pesticide.chemical.safety }}</p>
                             </div>
                             {% endif %}
-                            
-                            <!-- Chemical Agro Shop Buttons -->
+
+                            <!-- Chemical Agro Shop Buttons (no data dependency — always safe) -->
                             <div style="background: linear-gradient(135deg, rgba(255, 243, 224, 0.95) 0%, rgba(255, 224, 178, 0.95) 100%); padding: 25px; border-radius: 15px; margin: 20px 0; border: 2px solid rgba(255, 152, 0, 0.3);">
                                 <h6 style="color: #e65100; font-size: 1.2rem; margin-bottom: 15px; font-weight: 700;">
                                     <i class="fas fa-store"></i> Find Chemical Supplies
@@ -1931,37 +1982,70 @@
                             </div>
                         </div>
                         {% endif %}
+                        {# end chemical card #}
 
-                        <!-- Organic Treatment -->
+                        <!-- ── Organic Treatment ── -->
+                        {# FIX: guard every level of the organic pesticide chain individually #}
                         {% if result.pesticide and result.pesticide.organic %}
                         <div class="pesticide-card organic-card">
                             <div class="pesticide-header">
                                 <i class="fas fa-leaf"></i>
                                 <h6>Organic Treatment</h6>
                             </div>
-                            
+
+                            <!-- FIX: guard .name -->
+                            {% if result.pesticide.organic.name %}
                             <div class="treatment-name">
                                 <p>{{ result.pesticide.organic.name }}</p>
                             </div>
+                            {% endif %}
 
+                            <!-- ── Organic Dosage Block ── -->
+                            {# FIX: organic_dosage is the calculated value from Flask.          #}
+                            {# Guard with `if organic_dosage` so None never hits format().      #}
                             {% if organic_dosage %}
                             <div class="dosage-calculator">
                                 <h6><i class="fas fa-calculator"></i> Required Dosage</h6>
-                                <div class="dosage-amount">{{ "%.1f"|format(organic_dosage) }} {{ result.pesticide.organic.unit }}</div>
+                                <div class="dosage-amount">
+                                    {{ "%.1f"|format(organic_dosage) }}
+                                    {% if result.pesticide.organic.unit %} {{ result.pesticide.organic.unit }}{% endif %}
+                                </div>
+                                {% if area and area_unit %}
                                 <small>For {{ area }} {{ area_unit }}</small>
+                                {% endif %}
+                                {% if result.pesticide.organic.dosage_per_hectare and result.pesticide.organic.unit %}
                                 <span class="dosage-info">Base: {{ result.pesticide.organic.dosage_per_hectare }} {{ result.pesticide.organic.unit }}/hectare</span>
+                                {% endif %}
                             </div>
+
                             {% elif result.pesticide.organic.dosage_per_hectare %}
                             <div class="dosage-calculator" style="background: rgba(232, 245, 233, 0.5); border: 2px dashed #4caf50;">
                                 <h6><i class="fas fa-calculator"></i> Dosage Calculator</h6>
                                 <div style="padding: 15px; color: #2e7d32;">
-                                    <p style="margin-bottom: 10px;"><i class="fas fa-info-circle"></i> <strong>Standard dosage:</strong> {{ result.pesticide.organic.dosage_per_hectare }} {{ result.pesticide.organic.unit }}/hectare</p>
+                                    <p style="margin-bottom: 10px;">
+                                        <i class="fas fa-info-circle"></i>
+                                        <strong>Standard dosage:</strong>
+                                        {{ result.pesticide.organic.dosage_per_hectare }}
+                                        {% if result.pesticide.organic.unit %} {{ result.pesticide.organic.unit }}{% endif %}/hectare
+                                    </p>
                                     <p style="margin: 0; font-size: 0.9em;">💡 Enter your land area in the form above to calculate the exact dosage needed</p>
+                                </div>
+                            </div>
+
+                            {% else %}
+                            {# FIX: no organic dosage data at all — show informative fallback #}
+                            <div class="dosage-calculator" style="background: rgba(200,200,200,0.3); border: 2px dashed #aaa;">
+                                <h6><i class="fas fa-calculator"></i> Dosage Calculator</h6>
+                                <div style="padding: 15px; color: #555;">
+                                    <p style="margin: 0; font-size: 0.95em;">
+                                        <i class="fas fa-info-circle"></i>
+                                        Dosage calculation unavailable. Please consult the product label or a local agronomist.
+                                    </p>
                                 </div>
                             </div>
                             {% endif %}
 
-                            <!-- Usage Instructions -->
+                            <!-- FIX: guard .usage -->
                             {% if result.pesticide.organic.usage %}
                             <div class="treatment-info-box">
                                 <strong><i class="fas fa-hand-sparkles"></i> Usage Instructions</strong>
@@ -1969,7 +2053,7 @@
                             </div>
                             {% endif %}
 
-                            <!-- Application Frequency -->
+                            <!-- FIX: guard .frequency -->
                             {% if result.pesticide.organic.frequency %}
                             <div class="treatment-info-box">
                                 <strong><i class="fas fa-calendar-check"></i> Application Frequency</strong>
@@ -1977,29 +2061,27 @@
                             </div>
                             {% endif %}
 
-                            <!-- Video Resources -->
-                            {% if result.pesticide.organic.video_sources %}
+                            <!-- FIX: guard video_sources and search_urls -->
+                            {% if result.pesticide.organic.video_sources and result.pesticide.organic.video_sources.search_urls %}
                             <div class="video-section">
                                 <h6><i class="fab fa-youtube"></i> Video Tutorials</h6>
-                                {% if result.pesticide.organic.video_sources.search_urls %}
-                                    {% for video in result.pesticide.organic.video_sources.search_urls[:3] %}
-                                    <a href="{{ video.url }}" target="_blank" class="video-link">
-                                        <i class="fas fa-play-circle"></i> {{ video.term }}
-                                    </a>
-                                    {% endfor %}
-                                {% endif %}
+                                {% for video in result.pesticide.organic.video_sources.search_urls[:3] %}
+                                <a href="{{ video.url }}" target="_blank" class="video-link">
+                                    <i class="fas fa-play-circle"></i> {{ video.term }}
+                                </a>
+                                {% endfor %}
                             </div>
                             {% endif %}
 
-                            <!-- Safety & Benefits -->
+                            <!-- FIX: guard .safety -->
                             {% if result.pesticide.organic.safety %}
                             <div style="background: rgba(232, 245, 233, 0.9); padding: 15px; border-radius: 10px; margin-top: 15px; border-left: 4px solid #4caf50;">
                                 <strong style="color: #2e7d32;"><i class="fas fa-check-circle"></i> Safety & Benefits:</strong>
                                 <p style="margin: 5px 0 0 0; color: #2e7d32;">{{ result.pesticide.organic.safety }}</p>
                             </div>
                             {% endif %}
-                            
-                            <!-- Organic Agro Shop Buttons -->
+
+                            <!-- Organic Agro Shop Buttons (no data dependency — always safe) -->
                             <div style="background: linear-gradient(135deg, rgba(255, 243, 224, 0.95) 0%, rgba(255, 224, 178, 0.95) 100%); padding: 25px; border-radius: 15px; margin: 20px 0; border: 2px solid rgba(255, 152, 0, 0.3);">
                                 <h6 style="color: #e65100; font-size: 1.2rem; margin-bottom: 15px; font-weight: 700;">
                                     <i class="fas fa-store"></i> Find Organic Supplies
@@ -2018,35 +2100,34 @@
                             </div>
                         </div>
                         {% endif %}
+                        {# end organic card #}
+
                     </div>
                 </div>
             </div>
 
             <!-- Additional Resources Section -->
+            {# FIX: guard result.additional_resources and its sub-keys before accessing them #}
             {% if result.additional_resources %}
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="resources-section">
                         <h3><i class="fas fa-book-open"></i> Additional Resources & Step-by-Step Guide</h3>
-                        
-                        <!-- Step-by-Step Guide -->
-                        {% if result.additional_resources.step_by_step_guide %}
+
+                        {% if result.additional_resources.step_by_step_guide and result.additional_resources.step_by_step_guide|length > 0 %}
                         <div class="mb-4">
                             <h5 class="text-success mb-3"><i class="fas fa-list-ol"></i> Step-by-Step Treatment Guide</h5>
                             <div class="row">
                                 {% for step in result.additional_resources.step_by_step_guide %}
                                 <div class="col-md-6 mb-3">
-                                    <div class="step-card">
-                                        {{ step }}
-                                    </div>
+                                    <div class="step-card">{{ step }}</div>
                                 </div>
                                 {% endfor %}
                             </div>
                         </div>
                         {% endif %}
 
-                        <!-- Extension Guides -->
-                        {% if result.additional_resources.extension_guides %}
+                        {% if result.additional_resources.extension_guides and result.additional_resources.extension_guides|length > 0 %}
                         <div>
                             <h5 class="text-primary mb-3"><i class="fas fa-external-link-alt"></i> Expert Extension Guides</h5>
                             {% for guide in result.additional_resources.extension_guides %}
@@ -2056,11 +2137,18 @@
                             {% endfor %}
                         </div>
                         {% endif %}
+
+                        {# FIX: if additional_resources exists but both sub-sections are empty, show a fallback #}
+                        {% if (not result.additional_resources.step_by_step_guide or result.additional_resources.step_by_step_guide|length == 0) and
+                             (not result.additional_resources.extension_guides or result.additional_resources.extension_guides|length == 0) %}
+                        <p class="text-muted">No additional resources available for this disease at the moment.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
             {% endif %}
             {% endif %}
+            {# end single-disease block #}
 
             <!-- Individual Leaf Analysis - OVERVIEW CARDS -->
             {% if all_predictions and all_predictions|length > 0 %}
@@ -2088,12 +2176,12 @@
                                         
                                         <div class="overview-leaf-stat">
                                             <span class="overview-leaf-label">Disease:</span>
-                                            <span class="overview-leaf-value">{{ pred.predicted_class|replace('_', ' ') }}</span>
+                                            <span class="overview-leaf-value">{{ pred.predicted_class|replace('_', ' ') if pred.predicted_class else 'Unknown' }}</span>
                                         </div>
                                         
                                         <div class="overview-leaf-stat">
                                             <span class="overview-leaf-label">Confidence:</span>
-                                            <span class="overview-leaf-value">{{ "%.1f"|format(pred.confidence) }}%</span>
+                                            <span class="overview-leaf-value">{% if pred.confidence is not none %}{{ "%.1f"|format(pred.confidence) }}%{% else %}N/A{% endif %}</span>
                                         </div>
                                         
                                         {% if pred.model_severity %}
@@ -2147,8 +2235,8 @@
                         <div class="progress-indicator bg-white bg-opacity-20 rounded-lg p-4">
                             <div class="text-center">
                                 <div class="font-semibold">Previous</div>
-                                <div class="text-xl">{{ comparison.previous_disease.replace('_', ' ') }}</div>
-                                <div class="text-sm">Severity: {{ comparison.previous_severity }}</div>
+                                <div class="text-xl">{{ comparison.previous_disease.replace('_', ' ') if comparison.previous_disease else 'N/A' }}</div>
+                                <div class="text-sm">Severity: {{ comparison.previous_severity if comparison.previous_severity else 'N/A' }}</div>
                             </div>
                             
                             <div class="progress-arrow">
@@ -2163,8 +2251,8 @@
                             
                             <div class="text-center">
                                 <div class="font-semibold">Current</div>
-                                <div class="text-xl">{{ comparison.current_disease.replace('_', ' ') }}</div>
-                                <div class="text-sm">Severity: {{ comparison.current_severity }}</div>
+                                <div class="text-xl">{{ comparison.current_disease.replace('_', ' ') if comparison.current_disease else 'N/A' }}</div>
+                                <div class="text-sm">Severity: {{ comparison.current_severity if comparison.current_severity else 'N/A' }}</div>
                             </div>
                         </div>
                         
@@ -2244,17 +2332,22 @@
                                 
                                 <div class="leaf-info-item">
                                     <strong><i class="fas fa-virus"></i> Disease Detected</strong>
-                                    <h5 class="text-danger mt-2">{{ pred.predicted_class|replace('_', ' ') }}</h5>
+                                    <h5 class="text-danger mt-2">{{ pred.predicted_class|replace('_', ' ') if pred.predicted_class else 'Unknown' }}</h5>
                                 </div>
                                 
                                 <div class="leaf-info-item">
                                     <strong><i class="fas fa-chart-bar"></i> AI Confidence</strong>
-                                    {% if pred.confidence >= 90 %}
-                                    <span class="confidence-badge confidence-high">{{ "%.1f"|format(pred.confidence) }}%</span>
-                                    {% elif pred.confidence >= 70 %}
-                                    <span class="confidence-badge confidence-medium">{{ "%.1f"|format(pred.confidence) }}%</span>
+                                    {# FIX: guard confidence before formatting #}
+                                    {% if pred.confidence is not none %}
+                                        {% if pred.confidence >= 90 %}
+                                        <span class="confidence-badge confidence-high">{{ "%.1f"|format(pred.confidence) }}%</span>
+                                        {% elif pred.confidence >= 70 %}
+                                        <span class="confidence-badge confidence-medium">{{ "%.1f"|format(pred.confidence) }}%</span>
+                                        {% else %}
+                                        <span class="confidence-badge confidence-low">{{ "%.1f"|format(pred.confidence) }}%</span>
+                                        {% endif %}
                                     {% else %}
-                                    <span class="confidence-badge confidence-low">{{ "%.1f"|format(pred.confidence) }}%</span>
+                                    <span class="confidence-badge confidence-low">N/A</span>
                                     {% endif %}
                                 </div>
                                 
@@ -2265,21 +2358,22 @@
                                 </div>
                                 {% endif %}
                                 
+                                {# FIX: guard color_severity before formatting — 0 is valid so use `is not none` not truthy check #}
                                 {% if pred.color_severity is not none %}
                                 <div class="leaf-info-item">
                                     <strong><i class="fas fa-palette"></i> Color-Based Severity Analysis</strong>
                                     <div class="progress mt-2" style="height: 30px;">
                                         {% if pred.color_severity >= 50 %}
                                         <div class="progress-bar bg-danger" style="width: {{ pred.color_severity }}%;">
-                                            {{ "%.0f"|format(pred.color_severity) }}% - {{ pred.color_severity_level }}
+                                            {{ "%.0f"|format(pred.color_severity) }}% - {{ pred.color_severity_level if pred.color_severity_level else '' }}
                                         </div>
                                         {% elif pred.color_severity >= 30 %}
                                         <div class="progress-bar bg-warning" style="width: {{ pred.color_severity }}%;">
-                                            {{ "%.0f"|format(pred.color_severity) }}% - {{ pred.color_severity_level }}
+                                            {{ "%.0f"|format(pred.color_severity) }}% - {{ pred.color_severity_level if pred.color_severity_level else '' }}
                                         </div>
                                         {% else %}
                                         <div class="progress-bar bg-info" style="width: {{ pred.color_severity }}%;">
-                                            {{ "%.0f"|format(pred.color_severity) }}% - {{ pred.color_severity_level }}
+                                            {{ "%.0f"|format(pred.color_severity) }}% - {{ pred.color_severity_level if pred.color_severity_level else '' }}
                                         </div>
                                         {% endif %}
                                     </div>
